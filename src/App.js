@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   MapPin, 
   Globe, 
@@ -21,8 +21,8 @@ const App = () => {
   const [loaded, setLoaded] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
 
-  // Photo paths from environment variables with fallbacks
-  const photos = [
+  // Photo paths from environment variables with fallbacks - using useMemo to prevent recreation
+  const photos = useMemo(() => [
     { 
       id: 1, 
       src: process.env.REACT_APP_PHOTO_1 || '/api/placeholder/600/600', 
@@ -65,18 +65,18 @@ const App = () => {
       location: 'Beautiful Memory',
       date: '2024'
     },
-  ];
+  ], []);
 
   useEffect(() => {
     setTimeout(() => setLoaded(true), 300);
   }, []);
 
-  const openPhoto = (photo, index) => {
+  const openPhoto = useCallback((photo, index) => {
     setSelectedPhoto(photo);
     setCurrentIndex(index);
-  };
+  }, []);
 
-  const closePhoto = () => setSelectedPhoto(null);
+  const closePhoto = useCallback(() => setSelectedPhoto(null), []);
 
   const nextPhoto = useCallback(() => {
     const newIndex = (currentIndex + 1) % photos.length;
@@ -90,10 +90,9 @@ const App = () => {
     setSelectedPhoto(photos[newIndex]);
   }, [currentIndex, photos]);
 
-  const toggleMusic = () => {
+  const toggleMusic = useCallback(() => {
     setMusicPlaying(!musicPlaying);
-    // In a real app, you would play music here
-  };
+  }, [musicPlaying]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -104,7 +103,7 @@ const App = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedPhoto, currentIndex, nextPhoto, prevPhoto]);
+  }, [selectedPhoto, currentIndex, nextPhoto, prevPhoto, closePhoto]);
 
   // Floating hearts background
   const FloatingHearts = () => (
