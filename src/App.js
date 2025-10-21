@@ -148,7 +148,7 @@ const App = () => {
 
             <div className="text-center transform hover:scale-110 transition-transform duration-300">
               <div className="text-7xl mb-3 float-element" style={{animationDelay: '1s'}}>🇮🇩</div>
-              <p className="text-lg font-semibold text-gray-800">${placename}</p>
+              <p className="text-lg font-semibold text-gray-800">{placename}</p>
               <p className="text-sm text-gray-600">Beautiful Soul</p>
             </div>
           </div>
@@ -321,7 +321,7 @@ const App = () => {
               <span>Made with Love</span>
             </div>
             <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-            <span>India to ${placename}</span>
+            <span>India to {placename}</span>
             <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
             <span>Forever Friends</span>
           </div>
