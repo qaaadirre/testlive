@@ -13,6 +13,7 @@ const App = () => {
   const audioRef = useRef(null);
 
   // Environment variables
+  const placename = process.env.REACT_APP_PLACE_NAME || 'INDIA';
   const photosPath = process.env.REACT_APP_PHOTOS_PATH || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/lia';
   const musicUrl = process.env.REACT_APP_MUSIC_URL || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/lia/tosanaina.mp3';
 
@@ -147,7 +148,7 @@ const App = () => {
 
             <div className="text-center transform hover:scale-110 transition-transform duration-300">
               <div className="text-7xl mb-3 float-element" style={{animationDelay: '1s'}}>🇮🇩</div>
-              <p className="text-lg font-semibold text-gray-800">Indonesia</p>
+              <p className="text-lg font-semibold text-gray-800">${placename}</p>
               <p className="text-sm text-gray-600">Beautiful Soul</p>
             </div>
           </div>
@@ -320,7 +321,7 @@ const App = () => {
               <span>Made with Love</span>
             </div>
             <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-            <span>India to Indonesia</span>
+            <span>India to ${placename}</span>
             <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
             <span>Forever Friends</span>
           </div>
