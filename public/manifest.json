@@ -1,0 +1,17 @@
+{
+  "short_name": "Friendship Gallery",
+  "name": "A Special Friendship Memory Gallery",
+  "description": "A beautiful gallery celebrating friendship between India and Indonesia",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#f97316",
+  "background_color": "#fed7aa",
+  "orientation": "portrait-primary"
+}
