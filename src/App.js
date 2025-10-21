@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   MapPin, 
   Globe, 
@@ -78,17 +78,17 @@ const App = () => {
 
   const closePhoto = () => setSelectedPhoto(null);
 
-  const nextPhoto = () => {
+  const nextPhoto = useCallback(() => {
     const newIndex = (currentIndex + 1) % photos.length;
     setCurrentIndex(newIndex);
     setSelectedPhoto(photos[newIndex]);
-  };
+  }, [currentIndex, photos]);
 
-  const prevPhoto = () => {
+  const prevPhoto = useCallback(() => {
     const newIndex = (currentIndex - 1 + photos.length) % photos.length;
     setCurrentIndex(newIndex);
     setSelectedPhoto(photos[newIndex]);
-  };
+  }, [currentIndex, photos]);
 
   const toggleMusic = () => {
     setMusicPlaying(!musicPlaying);
@@ -104,7 +104,7 @@ const App = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedPhoto, currentIndex]);
+  }, [selectedPhoto, currentIndex, nextPhoto, prevPhoto]);
 
   // Floating hearts background
   const FloatingHearts = () => (
@@ -287,7 +287,7 @@ const App = () => {
 
       {/* Lightbox Modal */}
       {selectedPhoto && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 animate-fadeIn">
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
           <button
             onClick={closePhoto}
             className="absolute top-6 right-6 text-white hover:text-orange-400 transition-all duration-300 z-10 bg-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/20 hover:scale-110"
@@ -313,7 +313,7 @@ const App = () => {
             <img
               src={selectedPhoto.src}
               alt={selectedPhoto.caption}
-              className="max-w-full max-h-[70vh] object-contain rounded-2xl shadow-2xl transform animate-scaleIn"
+              className="max-w-full max-h-[70vh] object-contain rounded-2xl shadow-2xl"
               onError={(e) => {
                 e.target.src = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Cdefs%3E%3ClinearGradient id="grad" x1="0%25" y1="0%25" x2="100%25" y2="100%25"%3E%3Cstop offset="0%25" style="stop-color:%23fed7aa;stop-opacity:1" /%3E%3Cstop offset="100%25" style="stop-color:%23fecaca;stop-opacity:1" /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="800" height="600" fill="url(%23grad)"/%3E%3Ctext x="50%25" y="45%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="72" fill="%23c2410c"%3E%F0%9F%93%B7%3C/text%3E%3Ctext x="50%25" y="60%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="28" fill="%23dc2626"%3E${encodeURIComponent(selectedPhoto.caption)}%3C/text%3E%3C/svg%3E`;
               }}
