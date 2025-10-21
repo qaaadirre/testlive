@@ -186,21 +186,36 @@
     <div id="root"></div>
 
     <script>
-      // Inject placename dynamically (works in React env)
-      const placename = process.REACT_APP_PLACE_NAME || "INDIA";
-      document.getElementById("place-text").textContent = `INDIA → ${placename}`;
+      // The build system (e.g., Create React App) will replace the
+      // %REACT_APP_PLACE_NAME% placeholder string with the actual value from the .env file.
+      const injectedPlaceName = "%REACT_APP_PLACE_NAME%";
+      
+      // Determine the final placename: check if the build replacement happened.
+      // If the string starts and ends with %, the replacement failed, so use a default.
+      const placename = 
+        (injectedPlaceName.startsWith('%') && injectedPlaceName.endsWith('%'))
+          ? 'INDIA' // Safe Fallback Value
+          : injectedPlaceName;
+      
+      const placeTextElement = document.getElementById("place-text");
 
-      // Hide initial loader when React app loads
+      if (placeTextElement) {
+        // Set the text content using the determined placename
+        placeTextElement.textContent = `INDIA → ${placename}`;
+      }
+
+      // Hide initial loader when React app loads (window.load ensures all assets are ready)
       window.addEventListener("load", function () {
+        // Use a brief delay to ensure the main React code has time to mount to the DOM
         setTimeout(function () {
           const loader = document.getElementById("initial-loader");
           if (loader) {
             loader.style.opacity = "0";
             setTimeout(() => {
               loader.style.display = "none";
-            }, 500);
+            }, 500); // 500ms matches the opacity transition time
           }
-        }, 2000);
+        }, 500); // Wait 500ms before starting the fade-out
       });
     </script>
   </body>
