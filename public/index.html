@@ -80,6 +80,10 @@ e<!DOCTYPE html>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script>
+  // Environment variables
+  const placename = process.env.REACT_APP_PLACE_NAME || 'INDIA';
+    </script>
     
     <!-- Initial loading screen -->
     <div id="initial-loader" class="initial-loader">
@@ -89,7 +93,7 @@ e<!DOCTYPE html>
           Loading Our Special Memories...
         </h2>
         <p style="color: #dc2626; font-weight: 500;">
-          India 🇮🇳 → Indonesia 🇮🇩
+          India 🇮🇳 → {placename} 🇮🇩
         </p>
         <div style="margin-top: 30px; display: flex; gap: 10px; justify-content: center;">
           <div style="width: 12px; height: 12px; border-radius: 50%; background: #f97316; animation: bounce 1s ease-in-out infinite;"></div>
