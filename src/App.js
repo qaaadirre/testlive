@@ -17,7 +17,7 @@ const App = () => {
   const photos = useMemo(() => [
     { 
       id: 1, 
-      src: `${photosPath}/photo1.jpg`, 
+      src: `https://i.ibb.co/LDSzZXpS/Whats-App-Image-2025-09-15-at-19-03-47-b658db6d.jpg`, 
       caption: 'First Beautiful Memory 🌸', 
       location: 'Special Place',
       date: '2024'
