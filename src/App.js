@@ -11,7 +11,7 @@ const App = () => {
   const [musicPlaying, setMusicPlaying] = useState(false);
 
   // Get the photos path from environment variable
-  const photosPath = process.env.REACT_APP_PHOTOS_PATH || '/ell';
+  const photosPath = process.env.REACT_APP_PHOTOS_PATH || 'public/ell';
 
   // Photo paths using the environment variable path
   const photos = useMemo(() => [
