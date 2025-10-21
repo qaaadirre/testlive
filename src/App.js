@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { 
   MapPin, Globe, Heart, X, ChevronLeft, ChevronRight, Star, Plane,
   MessageCircle, Camera, Sparkles, Music, Gift
@@ -10,87 +10,37 @@ const App = () => {
   const [loaded, setLoaded] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
 
-  // Get the photos path from environment variable
-  const photosPath = process.env.REACT_APP_PHOTOS_PATH || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/lia';
+  const audioRef = useRef(null);
 
-  // Get the date  from environment variable
-  const photosdate1 = process.env.REACT_APP_PHOTOS_DATE1 || '2025';
-  const photosdate2 = process.env.REACT_APP_PHOTOS_DATE2 || '2025';
-  const photosdate3 = process.env.REACT_APP_PHOTOS_DATE3 || '2025';
-  const photosdate4 = process.env.REACT_APP_PHOTOS_DATE4 || '2025';
-  const photosdate5 = process.env.REACT_APP_PHOTOS_DATE5 || '2025';
-  const photosdate6 = process.env.REACT_APP_PHOTOS_DATE6 || '2025';
-  
-  // Photo paths using the environment variable path
+  // Environment variables
+  const photosPath = process.env.REACT_APP_PHOTOS_PATH || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/lia';
+  const musicUrl = process.env.REACT_APP_MUSIC_URL || 'https://cdn.pixabay.com/audio/2023/06/27/audio_3f37f9cfc0.mp3';
+
   const photos = useMemo(() => [
-    { 
-      id: 1, 
-      src: `${photosPath}/photo1.jpg`, 
-      caption: 'First Beautiful Memory 🌸', 
-      location: 'Special Place',
-      date: `${photosdate1}`
-    },
-    { 
-      id: 2, 
-      src: `${photosPath}/photo2.jpg`, 
-      caption: 'Precious Moments Together 💫', 
-      location: 'Heartwarming Spot',
-      date: `${photosdate2}`
-    },
-    { 
-      id: 3, 
-      src: `${photosPath}/photo3.jpg`, 
-      caption: 'Unforgettable Times ✨', 
-      location: 'Memory Lane',
-      date: `${photosdate3}`
-    },
-    { 
-      id: 4, 
-      src: `${photosPath}/photo4.jpg`, 
-      caption: 'Wonderful Days 🌟', 
-      location: 'Happy Place',
-      date: `${photosdate4}`
-    },
-    { 
-      id: 5, 
-      src: `${photosPath}/photo5.jpg`, 
-      caption: 'Amazing Memories 💖', 
-      location: 'Special Corner',
-      date: `${photosdate5}`
-    },
-    { 
-      id: 6, 
-      src: `${photosPath}/photo6.jpg`, 
-      caption: 'Cherished Moments 🌈', 
-      location: 'Beautiful Memory',
-      date: `${photosdate6}`
-    },
+    { id: 1, src: `/photo1.jpg`, caption: 'First Beautiful Memory 🌸', location: 'Special Place', date: '2024' },
+    { id: 2, src: `${photosPath}/photo2.jpg`, caption: 'Precious Moments Together 💫', location: 'Heartwarming Spot', date: '2024' },
+    { id: 3, src: `${photosPath}/photo3.jpg`, caption: 'Unforgettable Times ✨', location: 'Memory Lane', date: '2024' },
+    { id: 4, src: `${photosPath}/photo4.jpg`, caption: 'Wonderful Days 🌟', location: 'Happy Place', date: '2024' },
+    { id: 5, src: `${photosPath}/photo5.jpg`, caption: 'Amazing Memories 💖', location: 'Special Corner', date: '2024' },
+    { id: 6, src: `${photosPath}/photo6.jpg`, caption: 'Cherished Moments 🌈', location: 'Beautiful Memory', date: '2024' },
   ], [photosPath]);
 
   useEffect(() => {
     setTimeout(() => setLoaded(true), 300);
   }, []);
 
-  const openPhoto = useCallback((photo, index) => {
-    setSelectedPhoto(photo);
-    setCurrentIndex(index);
-  }, []);
-
+  const openPhoto = useCallback((photo, index) => { setSelectedPhoto(photo); setCurrentIndex(index); }, []);
   const closePhoto = useCallback(() => setSelectedPhoto(null), []);
-
-  const nextPhoto = useCallback(() => {
-    const newIndex = (currentIndex + 1) % photos.length;
-    setCurrentIndex(newIndex);
-    setSelectedPhoto(photos[newIndex]);
-  }, [currentIndex, photos]);
-
-  const prevPhoto = useCallback(() => {
-    const newIndex = (currentIndex - 1 + photos.length) % photos.length;
-    setCurrentIndex(newIndex);
-    setSelectedPhoto(photos[newIndex]);
-  }, [currentIndex, photos]);
+  const nextPhoto = useCallback(() => { const newIndex = (currentIndex + 1) % photos.length; setCurrentIndex(newIndex); setSelectedPhoto(photos[newIndex]); }, [currentIndex, photos]);
+  const prevPhoto = useCallback(() => { const newIndex = (currentIndex - 1 + photos.length) % photos.length; setCurrentIndex(newIndex); setSelectedPhoto(photos[newIndex]); }, [currentIndex, photos]);
 
   const toggleMusic = useCallback(() => {
+    if (!audioRef.current) return;
+    if (musicPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch(err => console.log('Autoplay blocked:', err));
+    }
     setMusicPlaying(!musicPlaying);
   }, [musicPlaying]);
 
@@ -105,7 +55,6 @@ const App = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedPhoto, currentIndex, nextPhoto, prevPhoto, closePhoto]);
 
-  // Floating hearts background
   const FloatingHearts = () => (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {[...Array(15)].map((_, i) => (
@@ -119,9 +68,7 @@ const App = () => {
             animationDelay: `${i * 0.7}s`,
             animationDuration: `${4 + Math.random() * 4}s`
           }}
-        >
-          ❤️
-        </div>
+        >❤️</div>
       ))}
     </div>
   );
@@ -130,20 +77,37 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-rose-50 to-pink-50 relative overflow-hidden">
       <FloatingHearts />
       
-      {/* Background pattern */}
-      <div className="absolute inset-0 bg-love-pattern opacity-10 z-0"></div>
+      {/* Audio element */}
+      <audio ref={audioRef} src={musicUrl} loop />
 
-      {/* Music Player */}
-      <button
-        onClick={toggleMusic}
-        className={`fixed top-6 right-6 z-50 p-4 rounded-full shadow-lg transition-all duration-300 ${
-          musicPlaying 
-            ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white animate-glow' 
-            : 'bg-white/80 backdrop-blur-sm text-orange-600 hover:bg-white'
-        }`}
-      >
-        <Music size={24} fill={musicPlaying ? "currentColor" : "none"} />
-      </button>
+      {/* Music Button with Visualizer */}
+      <div className="fixed top-6 right-6 z-50 flex items-center gap-3">
+        <button
+          onClick={toggleMusic}
+          className={`p-4 rounded-full shadow-lg transition-all duration-300 ${
+            musicPlaying
+              ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white animate-glow'
+              : 'bg-white/80 backdrop-blur-sm text-orange-600 hover:bg-white'
+          }`}
+        >
+          <Music size={24} fill={musicPlaying ? 'currentColor' : 'none'} />
+        </button>
+
+        {musicPlaying && (
+          <div className="flex gap-[3px] items-end h-5">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="w-[3px] bg-orange-500 rounded-full animate-bar"
+                style={{ animationDelay: `${i * 0.15}s` }}
+              ></div>
+            ))}
+          </div>
+        )}
+      </div>
+
+    {/* Background pattern */}
+      <div className="absolute inset-0 bg-love-pattern opacity-10 z-0"></div>
 
       {/* Hero Section */}
       <header className="relative pt-20 pb-24 px-4 z-10">
