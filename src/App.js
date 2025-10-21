@@ -321,7 +321,7 @@ const App = () => {
               <span>Made with Love</span>
             </div>
             <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-            <span>India to {placename}</span>
+            <span>INDIA to {placename}</span>
             <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
             <span>Forever Friends</span>
           </div>
