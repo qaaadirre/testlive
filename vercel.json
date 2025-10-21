@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "name": "friendship-gallery",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_PHOTO_1": "@react_app_photo_1",
+    "REACT_APP_PHOTO_2": "@react_app_photo_2",
+    "REACT_APP_PHOTO_3": "@react_app_photo_3",
+    "REACT_APP_PHOTO_4": "@react_app_photo_4",
+    "REACT_APP_PHOTO_5": "@react_app_photo_5",
+    "REACT_APP_PHOTO_6": "@react_app_photo_6"
+  },
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
+  "cleanUrls": true,
+  "trailingSlash": false
+}
