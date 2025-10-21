@@ -32,7 +32,7 @@ const App = () => {
     },
     { 
       id: 2, 
-      src: process.env.REACT_APP_PHOTO_2 || '/api/placeholder/600/600', 
+      src: process.env.REACT_APP_PHOTO_2 || '/ell/photo1.jpg', 
       caption: 'Precious Moments Together 💫', 
       location: 'Heartwarming Spot',
       date: '2024'
