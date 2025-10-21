@@ -1,7 +1,7 @@
 {
-  "name": "friendship-gallery",
+  "name": "special-friendship-gallery",
   "version": "1.0.0",
-  "description": "A beautiful friendship memory gallery between India and Indonesia",
+  "description": "A beautiful memory gallery for special friendships",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
@@ -9,6 +9,11 @@
     "react-scripts": "5.0.1",
     "lucide-react": "^0.263.1",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.0",
+    "postcss": "^8.4.24",
+    "autoprefixer": "^10.4.14"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -35,7 +40,7 @@
     ]
   },
   "homepage": ".",
-  "keywords": ["friendship", "gallery", "react", "memories", "create-react-app"],
+  "keywords": ["friendship", "gallery", "memories", "love", "special"],
   "author": "Your Name",
   "license": "MIT"
 }
