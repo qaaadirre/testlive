@@ -12,20 +12,30 @@
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "headers": {
+        "cache-control": "s-maxage=31536000,immutable"
+      }
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico"
+    },
+    {
+      "src": "/asset-manifest.json",
+      "dest": "/asset-manifest.json"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/manifest.json"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
   ],
-  "env": {
-    "REACT_APP_PHOTO_1": "@react_app_photo_1",
-    "REACT_APP_PHOTO_2": "@react_app_photo_2",
-    "REACT_APP_PHOTO_3": "@react_app_photo_3",
-    "REACT_APP_PHOTO_4": "@react_app_photo_4",
-    "REACT_APP_PHOTO_5": "@react_app_photo_5",
-    "REACT_APP_PHOTO_6": "@react_app_photo_6"
-  },
   "buildCommand": "npm run build",
   "outputDirectory": "build",
-  "cleanUrls": true,
-  "trailingSlash": false
+  "installCommand": "npm install",
+  "framework": "create-react-app"
 }
