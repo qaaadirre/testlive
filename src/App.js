@@ -13,6 +13,14 @@ const App = () => {
   // Get the photos path from environment variable
   const photosPath = process.env.REACT_APP_PHOTOS_PATH || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/lia';
 
+  // Get the date  from environment variable
+  const photosdate1 = process.env.REACT_APP_PHOTOS_DATE1 || '2025';
+  const photosdate2 = process.env.REACT_APP_PHOTOS_DATE2 || '2025';
+  const photosdate3 = process.env.REACT_APP_PHOTOS_DATE3 || '2025';
+  const photosdate4 = process.env.REACT_APP_PHOTOS_DATE4 || '2025';
+  const photosdate5 = process.env.REACT_APP_PHOTOS_DATE5 || '2025';
+  const photosdate6 = process.env.REACT_APP_PHOTOS_DATE6 || '2025';
+  
   // Photo paths using the environment variable path
   const photos = useMemo(() => [
     { 
@@ -20,42 +28,42 @@ const App = () => {
       src: `${photosPath}/photo1.jpg`, 
       caption: 'First Beautiful Memory 🌸', 
       location: 'Special Place',
-      date: '2024'
+      date: `${photosdate1}`
     },
     { 
       id: 2, 
       src: `${photosPath}/photo2.jpg`, 
       caption: 'Precious Moments Together 💫', 
       location: 'Heartwarming Spot',
-      date: '2024'
+      date: `${photosdate2}`
     },
     { 
       id: 3, 
       src: `${photosPath}/photo3.jpg`, 
       caption: 'Unforgettable Times ✨', 
       location: 'Memory Lane',
-      date: '2024'
+      date: `${photosdate3}`
     },
     { 
       id: 4, 
       src: `${photosPath}/photo4.jpg`, 
       caption: 'Wonderful Days 🌟', 
       location: 'Happy Place',
-      date: '2024'
+      date: `${photosdate4}`
     },
     { 
       id: 5, 
       src: `${photosPath}/photo5.jpg`, 
       caption: 'Amazing Memories 💖', 
       location: 'Special Corner',
-      date: '2024'
+      date: `${photosdate5}`
     },
     { 
       id: 6, 
       src: `${photosPath}/photo6.jpg`, 
       caption: 'Cherished Moments 🌈', 
       location: 'Beautiful Memory',
-      date: '2024'
+      date: `${photosdate6}`
     },
   ], [photosPath]);
 
