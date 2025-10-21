@@ -1,18 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
-  MapPin, 
-  Globe, 
-  Heart, 
-  X, 
-  ChevronLeft, 
-  ChevronRight, 
-  Star, 
-  Plane,
-  MessageCircle,
-  Camera,
-  Sparkles,
-  Music,
-  Gift
+  MapPin, Globe, Heart, X, ChevronLeft, ChevronRight, Star, Plane,
+  MessageCircle, Camera, Sparkles, Music, Gift
 } from 'lucide-react';
 
 const App = () => {
@@ -21,53 +10,55 @@ const App = () => {
   const [loaded, setLoaded] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
 
-  // FIXED: Correct photo paths with consistent local paths
+  // Get the photos path from environment variable
+  const photosPath = process.env.REACT_APP_PHOTOS_PATH || '/ell';
+
+  // Photo paths using the environment variable path
   const photos = useMemo(() => [
     { 
       id: 1, 
-      src: process.env.REACT_APP_PHOTO_1 || '/ell/photo1.jpg', 
+      src: `${photosPath}/photo1.jpg`, 
       caption: 'First Beautiful Memory 🌸', 
       location: 'Special Place',
       date: '2024'
     },
     { 
       id: 2, 
-      src: process.env.REACT_APP_PHOTO_2 || '/ell/photo2.jpg', 
+      src: `${photosPath}/photo2.jpg`, 
       caption: 'Precious Moments Together 💫', 
       location: 'Heartwarming Spot',
       date: '2024'
     },
     { 
       id: 3, 
-      src: process.env.REACT_APP_PHOTO_3 || '/ell/photo3.jpg', 
+      src: `${photosPath}/photo3.jpg`, 
       caption: 'Unforgettable Times ✨', 
       location: 'Memory Lane',
       date: '2024'
     },
     { 
       id: 4, 
-      src: process.env.REACT_APP_PHOTO_4 || '/ell/photo4.jpg', 
+      src: `${photosPath}/photo4.jpg`, 
       caption: 'Wonderful Days 🌟', 
       location: 'Happy Place',
       date: '2024'
     },
     { 
       id: 5, 
-      src: process.env.REACT_APP_PHOTO_5 || '/ell/photo5.jpg', 
+      src: `${photosPath}/photo5.jpg`, 
       caption: 'Amazing Memories 💖', 
       location: 'Special Corner',
       date: '2024'
     },
     { 
       id: 6, 
-      src: process.env.REACT_APP_PHOTO_6 || '/ell/photo6.jpg', 
+      src: `${photosPath}/photo6.jpg`, 
       caption: 'Cherished Moments 🌈', 
       location: 'Beautiful Memory',
       date: '2024'
     },
-  ], []);
+  ], [photosPath]);
 
-  // ... rest of your code remains exactly the same ...
   useEffect(() => {
     setTimeout(() => setLoaded(true), 300);
   }, []);
