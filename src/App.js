@@ -14,7 +14,7 @@ const App = () => {
 
   // Environment variables
   const photosPath = process.env.REACT_APP_PHOTOS_PATH || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/lia';
-  const musicUrl = process.env.REACT_APP_MUSIC_URL || 'https://cdn.pixabay.com/audio/2023/06/27/audio_3f37f9cfc0.mp3';
+  const musicUrl = process.env.REACT_APP_MUSIC_URL || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/lia/tosanaina.mp3';
 
   const photos = useMemo(() => [
     { id: 1, src: `${photosPath}/photo1.jpg`, caption: 'First Beautiful Memory 🌸', location: 'Special Place', date: '2025' },
