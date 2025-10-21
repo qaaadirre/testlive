@@ -129,7 +129,7 @@ const App = () => {
           {/* Flags and Distance */}
           <div className="flex justify-center items-center gap-8 mb-12">
             <div className="text-center transform hover:scale-110 transition-transform duration-300">
-              <div className="text-7xl mb-3 float-element">🇮🇳</div>
+              <div className="text-7xl mb-3 float-element">ME</div>
               <p className="text-lg font-semibold text-gray-800">India</p>
               <p className="text-sm text-gray-600">Kochi</p>
             </div>
@@ -147,7 +147,7 @@ const App = () => {
             </div>
 
             <div className="text-center transform hover:scale-110 transition-transform duration-300">
-              <div className="text-7xl mb-3 float-element" style={{animationDelay: '1s'}}>🇮🇩</div>
+              <div className="text-7xl mb-3 float-element" style={{animationDelay: '1s'}}>YOU</div>
               <p className="text-lg font-semibold text-gray-800">{placename}</p>
               <p className="text-sm text-gray-600">Beautiful Soul</p>
             </div>
