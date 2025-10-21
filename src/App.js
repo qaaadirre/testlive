@@ -21,52 +21,53 @@ const App = () => {
   const [loaded, setLoaded] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
 
-  // Photo paths from environment variables with fallbacks - using useMemo to prevent recreation
+  // FIXED: Correct photo paths with consistent local paths
   const photos = useMemo(() => [
     { 
       id: 1, 
-      src: process.env.REACT_APP_PHOTO_1 || './ell/photo1.jpg', 
+      src: process.env.REACT_APP_PHOTO_1 || '/ell/photo1.jpg', 
       caption: 'First Beautiful Memory 🌸', 
       location: 'Special Place',
       date: '2024'
     },
     { 
       id: 2, 
-      src: process.env.REACT_APP_PHOTO_2 || '/ell/photo1.jpg', 
+      src: process.env.REACT_APP_PHOTO_2 || '/ell/photo2.jpg', 
       caption: 'Precious Moments Together 💫', 
       location: 'Heartwarming Spot',
       date: '2024'
     },
     { 
       id: 3, 
-      src: process.env.REACT_APP_PHOTO_3 || '/api/placeholder/600/600', 
+      src: process.env.REACT_APP_PHOTO_3 || '/ell/photo3.jpg', 
       caption: 'Unforgettable Times ✨', 
       location: 'Memory Lane',
       date: '2024'
     },
     { 
       id: 4, 
-      src: process.env.REACT_APP_PHOTO_4 || '/api/placeholder/600/600', 
+      src: process.env.REACT_APP_PHOTO_4 || '/ell/photo4.jpg', 
       caption: 'Wonderful Days 🌟', 
       location: 'Happy Place',
       date: '2024'
     },
     { 
       id: 5, 
-      src: process.env.REACT_APP_PHOTO_5 || '/api/placeholder/600/600', 
+      src: process.env.REACT_APP_PHOTO_5 || '/ell/photo5.jpg', 
       caption: 'Amazing Memories 💖', 
       location: 'Special Corner',
       date: '2024'
     },
     { 
       id: 6, 
-      src: process.env.REACT_APP_PHOTO_6 || '/api/placeholder/600/600', 
+      src: process.env.REACT_APP_PHOTO_6 || '/ell/photo6.jpg', 
       caption: 'Cherished Moments 🌈', 
       location: 'Beautiful Memory',
       date: '2024'
     },
   ], []);
 
+  // ... rest of your code remains exactly the same ...
   useEffect(() => {
     setTimeout(() => setLoaded(true), 300);
   }, []);
