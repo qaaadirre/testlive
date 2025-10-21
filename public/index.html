@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f97316" />
+    <meta
+      name="description"
+      content="A beautiful friendship memory gallery between India and Indonesia"
+    />
+    <meta name="keywords" content="friendship, gallery, memories, india, indonesia" />
+    <meta property="og:title" content="A Special Friendship - Memory Gallery" />
+    <meta property="og:description" content="Distance means so little when someone means so much" />
+    <meta property="og:type" content="website" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>A Special Friendship - Memory Gallery</title>
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      /* Critical CSS for initial load */
+      body {
+        margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: linear-gradient(135deg, #fed7aa 0%, #ffffff 50%, #fecaca 100%);
+      }
+      
+      /* Loading animation */
+      .initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #fed7aa 0%, #ffffff 50%, #fecaca 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+      
+      .loader-heart {
+        animation: pulse 1.5s ease-in-out infinite;
+        color: #ef4444;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    
+    <!-- Initial loading screen -->
+    <div id="initial-loader" class="initial-loader">
+      <div style="text-align: center;">
+        <div class="loader-heart" style="font-size: 48px; margin-bottom: 20px;">❤️</div>
+        <h2 style="color: #c2410c; margin-bottom: 10px;">Loading Special Memories...</h2>
+        <p style="color: #dc2626;">India 🇮🇳 → Indonesia 🇮🇩</p>
+      </div>
+    </div>
+    
+    <div id="root"></div>
+    
+    <script>
+      // Hide initial loader when React app loads
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const loader = document.getElementById('initial-loader');
+          if (loader) {
+            loader.style.opacity = '0';
+            loader.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => loader.remove(), 500);
+          }
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>
