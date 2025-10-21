@@ -69,6 +69,9 @@ html {
   animation: heartbeat 1.5s ease-in-out infinite;
 }
 
+
+
+
 @keyframes heartbeat {
   0% { transform: scale(1); }
   25% { transform: scale(1.1); }
@@ -76,3 +79,25 @@ html {
   75% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
+
+/* Pulsing visualizer bars */
+@keyframes barPulse {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.6; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+.animate-bar { animation: barPulse 1s ease-in-out infinite; }
+
+/* Floating hearts */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+/* Optional glow effect for active music button */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 10px #f97316, 0 0 20px #f43f5e; }
+  50% { box-shadow: 0 0 20px #f97316, 0 0 40px #f43f5e; }
+}
+.animate-glow { animation: glow 1.5s infinite alternate; }
