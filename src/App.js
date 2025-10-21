@@ -25,7 +25,7 @@ const App = () => {
   const photos = useMemo(() => [
     { 
       id: 1, 
-      src: process.env.REACT_APP_PHOTO_1 || '/api/placeholder/600/600', 
+      src: process.env.REACT_APP_PHOTO_1 || './ell/photo1.jpg', 
       caption: 'First Beautiful Memory 🌸', 
       location: 'Special Place',
       date: '2024'
