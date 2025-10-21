@@ -11,13 +11,13 @@ const App = () => {
   const [musicPlaying, setMusicPlaying] = useState(false);
 
   // Get the photos path from environment variable
-  const photosPath = process.env.REACT_APP_PHOTOS_PATH || 'public/ell';
+  const photosPath = process.env.REACT_APP_PHOTOS_PATH || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/lia';
 
   // Photo paths using the environment variable path
   const photos = useMemo(() => [
     { 
       id: 1, 
-      src: `https://i.ibb.co/LDSzZXpS/Whats-App-Image-2025-09-15-at-19-03-47-b658db6d.jpg`, 
+      src: `/photo1.jpg`, 
       caption: 'First Beautiful Memory 🌸', 
       location: 'Special Place',
       date: '2024'
