@@ -129,7 +129,7 @@ const App = () => {
           {/* Flags and Distance */}
           <div className="flex justify-center items-center gap-8 mb-12">
             <div className="text-center transform hover:scale-110 transition-transform duration-300">
-              <div className="text-7xl mb-3 float-element">ME</div>
+              <div className="text-7xl mb-3 float-element">🇮🇳</div>
               <p className="text-lg font-semibold text-gray-800">India</p>
               <p className="text-sm text-gray-600">Kochi</p>
             </div>
@@ -147,7 +147,7 @@ const App = () => {
             </div>
 
             <div className="text-center transform hover:scale-110 transition-transform duration-300">
-              <div className="text-7xl mb-3 float-element" style={{animationDelay: '1s'}}>YOU</div>
+              <div className="text-7xl mb-3 float-element" style={{animationDelay: '1s'}}>🇮🇩</div>
               <p className="text-lg font-semibold text-gray-800">{placename}</p>
               <p className="text-sm text-gray-600">Beautiful Soul</p>
             </div>
@@ -304,9 +304,9 @@ const App = () => {
       <footer className="relative bg-gradient-to-r from-orange-100/80 to-pink-100/80 border-t border-orange-200/50 py-16 mt-20 backdrop-blur-sm z-10">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-6 mb-8">
-            <span className="text-4xl transform hover:scale-110 transition-transform duration-300">🇮🇳</span>
+            <span className="text-4xl transform hover:scale-110 transition-transform duration-300">ME</span>
             <Gift className="text-red-500 heart-pulse" size={40} />
-            <span className="text-4xl transform hover:scale-110 transition-transform duration-300">🇮🇩</span>
+            <span className="text-4xl transform hover:scale-110 transition-transform duration-300">YOU</span>
           </div>
           <p className="text-2xl font-bold text-gray-800 mb-4 gradient-text bg-clip-text text-transparent">
             Friendship Knows No Borders
