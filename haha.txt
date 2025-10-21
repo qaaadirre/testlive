@@ -1,10 +1,1 @@
-# Copy this file to .env and update with your actual photo URLs
-REACT_APP_PHOTO_1=/ell/photo1.jpg
-REACT_APP_PHOTO_2=/ell/photo2.jpg
-REACT_APP_PHOTO_3=/ell/photo3.jpg
-REACT_APP_PHOTO_4=/ell/photo4.jpg
-REACT_APP_PHOTO_5=/ell/photo5.jpg
-REACT_APP_PHOTO_6=/ell/photo6.jpg
-# Optional: Add more photos if needed
-# REACT_APP_PHOTO_7=https://example.com/photos/photo7.jpg
-# REACT_APP_PHOTO_8=https://example.com/photos/photo8.jpg
+REACT_APP_PHOTOS_DATE1
