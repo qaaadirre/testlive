@@ -3,6 +3,22 @@
   "version": "1.0.0",
   "description": "A beautiful memory gallery for special friendships",
   "private": true,
+  "author": "Your Name",
+  "license": "MIT",
+  "keywords": [
+    "friendship",
+    "gallery",
+    "memories",
+    "love",
+    "special"
+  ],
+  "homepage": ".",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -14,12 +30,6 @@
     "tailwindcss": "^3.3.0",
     "postcss": "^8.4.24",
     "autoprefixer": "^10.4.14"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -39,8 +49,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": ".",
-  "keywords": ["friendship", "gallery", "memories", "love", "special"],
-  "author": "Your Name",
-  "license": "MIT"
+  "engines": {
+    "node": "20.17.0",
+    "npm": "10.x"
+  }
 }
