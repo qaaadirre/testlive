@@ -192,7 +192,7 @@ const App = () => {
           }`}
           aria-label={musicPlaying ? "Pause music" : "Play music"}
         >
-          <Music size={20} sm:size={24} fill={musicPlaying ? 'currentColor' : 'none'} />
+          <Music size={20} size={24} fill={musicPlaying ? 'currentColor' : 'none'} />
         </button>
 
         {musicPlaying && (
@@ -241,8 +241,8 @@ const App = () => {
             {/* Distance Indicator */}
             <div className="flex flex-col items-center py-4">
               <div className="relative">
-                <Plane className="text-orange-500 animate-bounce-custom mb-2" size={32} sm:size={40} />
-                <Sparkles className="absolute -top-2 -right-2 text-yellow-500 animate-pulse" size={16} sm:size={20} />
+                <Plane className="text-orange-500 animate-bounce-custom mb-2" size={32} size={40} />
+                <Sparkles className="absolute -top-2 -right-2 text-yellow-500 animate-pulse" size={16} size={20} />
               </div>
               <div className="flex items-center gap-2 text-base sm:text-lg text-gray-700 font-medium mt-1">
                 <Globe size={18} />
@@ -263,7 +263,7 @@ const App = () => {
           {/* Special Message (Responsive Padding and Text Size) */}
           <div className="mt-8 max-w-3xl mx-auto glass-effect rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/50">
             <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-              <MessageCircle className="text-orange-500" size={24} sm:size={28} />
+              <MessageCircle className="text-orange-500" size={24} size={28} />
               <h2 className="text-xl sm:text-2xl font-bold text-gray-800">A Message From My Heart</h2>
             </div>
             <p className="text-sm sm:text-lg text-gray-700 leading-relaxed italic text-center font-light">
@@ -284,9 +284,9 @@ const App = () => {
       <main className="max-w-7xl mx-auto px-4 pb-24 relative z-10">
         <div className="text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-            <Camera className="text-orange-500" size={28} sm:size={32} />
+            <Camera className="text-orange-500" size={28} size={32} />
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-800">Our Precious Memories</h2>
-            <Camera className="text-orange-500" size={28} sm:size={32} />
+            <Camera className="text-orange-500" size={28} size={32} />
           </div>
           <p className="text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Every snapshot tells the beautiful story of our friendship - 
@@ -332,7 +332,7 @@ const App = () => {
                     </p>
                     <div className="flex items-center justify-between transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                       <div className="flex items-center gap-2 text-white/90">
-                        <MapPin size={14} sm:size={16} />
+                        <MapPin size={14} size={16} />
                         <span className="text-xs sm:text-sm">{photo.location}</span>
                       </div>
                       <div className="flex gap-1">
@@ -369,7 +369,7 @@ const App = () => {
             className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white hover:text-orange-400 transition-all duration-300 z-10 bg-white/10 rounded-full p-3 sm:p-4 backdrop-blur-sm hover:bg-white/20 hover:scale-110"
             aria-label="Close photo"
           >
-            <X size={24} sm:size={28} />
+            <X size={24} size={28} />
           </button>
 
           {/* Previous Button (Large touch target) */}
@@ -378,7 +378,7 @@ const App = () => {
             className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-orange-400 transition-all duration-300 z-10 bg-white/10 rounded-full p-3 sm:p-4 backdrop-blur-sm hover:bg-white/20 hover:scale-110"
             aria-label="Previous photo"
           >
-            <ChevronLeft size={28} sm:size={32} />
+            <ChevronLeft size={28} size={32} />
           </button>
 
           {/* Next Button (Large touch target) */}
@@ -387,7 +387,7 @@ const App = () => {
             className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-orange-400 transition-all duration-300 z-10 bg-white/10 rounded-full p-3 sm:p-4 backdrop-blur-sm hover:bg-white/20 hover:scale-110"
             aria-label="Next photo"
           >
-            <ChevronRight size={28} sm:size={32} />
+            <ChevronRight size={28} size={32} />
           </button>
 
           <div className="max-w-6xl max-h-[95vh] flex flex-col items-center">
@@ -424,7 +424,7 @@ const App = () => {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-4 sm:gap-6 mb-6 sm:mb-8">
             <span className="text-3xl sm:text-4xl transform hover:scale-110 transition-transform duration-300">ME</span>
-            <Gift className="text-red-500 heart-pulse" size={32} sm:size={40} />
+            <Gift className="text-red-500 heart-pulse" size={32} size={40} />
             <span className="text-3xl sm:text-4xl transform hover:scale-110 transition-transform duration-300">YOU</span>
           </div>
           <p className="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4 gradient-text bg-clip-text text-transparent">
