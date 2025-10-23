@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const ImageSlideshow = () => {
   const photosPath = process.env.REACT_APP_PHOTOS_PATH;
@@ -8,10 +8,9 @@ const ImageSlideshow = () => {
     `${photosPath}/photo3.jpg`,
     `${photosPath}/photo4.jpg`,
     `${photosPath}/photo5.jpg`,
-    `${photosPath}/photo6.jpg`
+    `${photosPath}/photo6.jpg`,
   ];
-
-  const texts = [
+  const captions = [
     "Hello, little cutie~",
     "When we first met, the girl's serious little eyes, hehe",
     "I was also comparing my feelings at that time~(. ・ω・。) ノ♡",
@@ -23,16 +22,17 @@ const ImageSlideshow = () => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => setIndex((prev) => (prev + 1) % images.length), 2500);
+    const interval = setInterval(() => {
+      setIndex(prev => (prev + 1) % images.length);
+    }, 2500);
+
     return () => clearInterval(interval);
   }, [images.length]);
 
-  const handleError = () => setIndex((prev) => (prev + 1) % images.length);
-
   return (
     <div id="imgTxt">
-      <span id="Txt">{texts[index % texts.length]}</span>
-      <img src={images[index]} alt="slideshow" onError={handleError} />
+      <span id="Txt">{captions[index]}</span>
+      <img src={images[index]} alt="slideshow" id="img" />
     </div>
   );
 };
