@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './HeartBackground.css';
+import './HeartBackground.css'; // Also make sure this CSS file exists
 
 const HeartBackground = () => {
   const [hearts, setHearts] = useState([]);
