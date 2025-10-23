@@ -1,121 +1,176 @@
-/* Reset and base styles */
+/* Base */
 body, html {
   margin: 0;
   padding: 0;
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(to bottom right, #fff0f5, #ffe6eb);
-  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at top, #2b2b2b, #111);
+  color: #fff;
   overflow-x: hidden;
+  height: 100%;
 }
 
+/* Main app container */
 .App {
   position: relative;
   min-height: 100vh;
+  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  text-align: center;
-  color: #333;
 }
 
-/* Floating hearts background */
+/* Floating hearts */
 .heart-bg {
   position: fixed;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   top: 0;
   left: 0;
   z-index: 0;
+  overflow: hidden;
 }
 
-/* HEADER (Timer) */
+/* Header (Timer) */
 .header {
   z-index: 2;
-  padding: 20px 0;
-  font-size: 1.3rem;
-  color: #ff3366;
-  font-weight: 500;
+  padding-top: 20px;
+  font-size: 1.2rem;
+  color: #ff99aa;
+  font-weight: 600;
   letter-spacing: 0.5px;
-  text-shadow: 0 0 4px rgba(255, 51, 102, 0.4);
+  text-shadow: 0 0 6px rgba(255, 105, 135, 0.6);
 }
 
-/* MAIN SECTION */
+/* Main section */
 .main {
   z-index: 2;
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 25px;
+  flex: 1;
+  gap: 20px;
   padding: 20px;
 }
 
-/* Typewriter text */
-.main h1, .main p {
+/* Typewriter text (Hi Qaaadir, etc.) */
+.TypeWriter, .main h1, .main p {
   margin: 0;
-  font-size: 1.4rem;
-  color: #222;
-  font-weight: 600;
+  color: #ffdee9;
+  font-weight: 500;
+  text-shadow: 0 2px 10px rgba(255, 100, 150, 0.4);
+  font-size: 1.2rem;
 }
 
-/* Image Slideshow / Image Card */
+/* Image card (slideshow container) */
 .image-slideshow {
-  position: relative;
-  width: 270px;
-  height: 270px;
+  width: 300px;
+  height: 380px;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  border: 2px solid #ff6f91;
-  background: #fff;
+  position: relative;
+  box-shadow: 0 10px 35px rgba(255, 105, 135, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.image-slideshow:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 45px rgba(255, 105, 135, 0.35);
 }
 
 .image-slideshow img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 1.5s ease;
+  transition: opacity 1s ease, transform 1.5s ease;
+  border-radius: 20px;
 }
 
-.image-slideshow img:hover {
-  transform: scale(1.05);
+/* Caption text below image */
+.image-caption {
+  margin-top: 10px;
+  font-size: 1.05rem;
+  color: #ffd1dc;
+  text-shadow: 0 2px 10px rgba(255, 100, 150, 0.4);
+  font-weight: 400;
+  padding: 0 10px;
 }
 
-/* FOOTER */
+/* Footer */
 .footer {
   z-index: 2;
-  padding: 10px 0;
+  padding: 15px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 1rem;
-  background: #ffe4ec;
-  border-top: 2px solid #ffb6c1;
-  color: #ff3366;
   font-weight: 500;
-  text-shadow: 0 0 4px rgba(255, 51, 102, 0.3);
+  color: #ffc6d0;
+  text-shadow: 0 0 4px rgba(255, 105, 135, 0.3);
+  backdrop-filter: blur(6px);
 }
 
-/* RESPONSIVE DESIGN */
+.footer span {
+  color: #ff6b81;
+  font-weight: 700;
+}
+
+/* Smooth fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.main, .header, .footer {
+  animation: fadeIn 1.5s ease;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .header {
-    font-size: 1.1rem;
-    padding: 15px 0;
+    font-size: 1rem;
   }
 
   .main {
-    gap: 20px;
+    gap: 15px;
+  }
+
+  .TypeWriter {
+    font-size: 1rem;
   }
 
   .image-slideshow {
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 320px;
   }
 
-  .main h1, .main p {
-    font-size: 1.1rem;
+  .image-caption {
+    font-size: 0.95rem;
   }
 
   .footer {
     font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    font-size: 0.95rem;
+    padding-top: 15px;
+  }
+
+  .TypeWriter {
+    font-size: 0.95rem;
+  }
+
+  .image-slideshow {
+    width: 220px;
+    height: 280px;
+  }
+
+  .footer {
+    font-size: 0.85rem;
   }
 }
