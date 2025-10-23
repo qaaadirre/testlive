@@ -1,8 +1,8 @@
 import React from 'react';
-import Timer from './components/Timer';
-import TypeWriter from './components/TypeWriter';
-import ImageSlideshow from './components/ImageSlideshow';
 import HeartBackground from './components/HeartBackground';
+import Timer from './components/Timer';
+import ImageSlideshow from './components/ImageSlideshow';
+import TypeWriter from './components/TypeWriter';
 import './styles.css';
 
 function App() {
@@ -14,16 +14,16 @@ function App() {
 
       <HeartBackground />
 
-      <ImageSlideshow />
-
-      <div id="content">
-        <h2>We have been together</h2>
+      <header style={{position:'fixed', top:'20px', width:'100%', textAlign:'center', zIndex:2}}>
         <Timer />
-      </div>
+      </header>
 
-      <TypeWriter />
+      <main style={{display:'flex', justifyContent:'center', alignItems:'center', flexDirection:'column', zIndex:2, marginTop:'100px'}}>
+        <ImageSlideshow />
+        <TypeWriter />
+      </main>
 
-      <footer>
+      <footer style={{position:'fixed', bottom:'0', width:'100%', textAlign:'center', zIndex:2, padding:'10px 0', background:'rgba(0,0,0,0.4)', color:'#fff'}}>
         Made with ❤️ by Qaaadir
       </footer>
     </div>
