@@ -2,31 +2,32 @@ import React, { useEffect, useState } from 'react';
 
 const TypeWriter = () => {
   const name = process.env.REACT_APP_NAME || 'Qaaadir';
-  const textArray = [name, 'Do you know thaaat!'];
-  const [textIndex, setTextIndex] = useState(0);
-  const [displayText, setDisplayText] = useState('');
-  const [charIndex, setCharIndex] = useState(0);
+  const text1 = `Hi ${name}~`;
+  const text2 = "Do you know thaaat!";
+  const [i, setI] = useState(0);
+  const [text, setText] = useState('');
 
   useEffect(() => {
+    let current = 0;
+    let txtArray = [text1, text2];
+    let idx = 0;
+
     const interval = setInterval(() => {
-      if (charIndex < textArray[textIndex].length) {
-        setDisplayText(prev => prev + textArray[textIndex][charIndex]);
-        setCharIndex(prev => prev + 1);
+      if(current < txtArray[idx].length){
+        setText(prev => prev + txtArray[idx][current]);
+        current++;
       } else {
-        setTimeout(() => {
-          setDisplayText('');
-          setCharIndex(0);
-          setTextIndex((prev) => (prev + 1) % textArray.length);
-        }, 1500);
+        current = 0;
+        setText('');
+        idx = (idx+1) % txtArray.length;
       }
     }, 150);
-
     return () => clearInterval(interval);
-  }, [charIndex, textIndex, textArray]);
+  }, [text1, text2]);
 
   return (
-    <div id="typeDiv">
-      <span>{displayText}</span>
+    <div id="typeDiv" style={{position:'fixed', bottom:'100px', width:'100%', textAlign:'center'}}>
+      {text}
     </div>
   );
 };
