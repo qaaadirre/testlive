@@ -12,23 +12,19 @@ function App() {
         <source src="music/music.mp3" type="audio/mpeg" />
       </audio>
 
-      {/* Floating hearts */}
       <HeartBackground />
 
-      {/* Center photo card */}
       <ImageSlideshow />
 
-      {/* Top timer */}
       <div id="content">
         <h2>We have been together</h2>
         <Timer />
       </div>
 
-      {/* Bottom typewriter */}
       <TypeWriter />
 
       <footer>
-        Made with ❤️ by <span>Qaaadir</span>
+        Made with ❤️ by Qaaadir
       </footer>
     </div>
   );
