@@ -14,16 +14,20 @@ function App() {
 
       <HeartBackground />
 
-      <header style={{position:'fixed', top:'20px', width:'100%', textAlign:'center', zIndex:2}}>
+      {/* Header – Timer */}
+      <header className="header">
         <Timer />
       </header>
 
-      <main style={{display:'flex', justifyContent:'center', alignItems:'center', flexDirection:'column', zIndex:2, marginTop:'100px'}}>
-        <ImageSlideshow />
+      {/* Main Content */}
+      <main className="main">
+        {/* Typewriter now above image card */}
         <TypeWriter />
+        <ImageSlideshow />
       </main>
 
-      <footer style={{position:'fixed', bottom:'0', width:'100%', textAlign:'center', zIndex:2, padding:'10px 0', background:'rgba(0,0,0,0.4)', color:'#fff'}}>
+      {/* Footer */}
+      <footer className="footer">
         Made with ❤️ by Qaaadir
       </footer>
     </div>
