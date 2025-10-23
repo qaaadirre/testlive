@@ -5,13 +5,19 @@ const ImageSlideshow = () => {
   const images = [
     `${photosPath}/photo1.jpg`,
     `${photosPath}/photo2.jpg`,
-    `${photosPath}/photo3.jpg`
+    `${photosPath}/photo3.jpg`,
+    `${photosPath}/photo4.jpg`,
+    `${photosPath}/photo5.jpg`,
+    `${photosPath}/photo6.jpg`
   ];
 
   const texts = [
     "Hello, little cutie~",
     "When we first met, the girl's serious little eyes, hehe",
-    "I really like the bunny and carrot given by the girl!!!"
+    "I was also comparing my feelings at that time~(. ・ω・。) ノ♡",
+    "It's my first time to go to Chongqing to meet a girl, and a little fairy appears",
+    "By the river, the moonlight is so beautiful tonight",
+    "Walking with claws, happy~o(≧v≦)o"
   ];
 
   const [index, setIndex] = useState(0);
