@@ -8,7 +8,7 @@ const ImageSlideshow = () => {
     `${photosPath}/photo3.jpg`,
     `${photosPath}/photo4.jpg`,
     `${photosPath}/photo5.jpg`,
-    `${photosPath}/photo6.jpg`,
+    `${photosPath}/photo6.jpg`
   ];
   const captions = [
     "Hello, little cutie~",
@@ -25,7 +25,6 @@ const ImageSlideshow = () => {
     const interval = setInterval(() => {
       setIndex(prev => (prev + 1) % images.length);
     }, 2500);
-
     return () => clearInterval(interval);
   }, [images.length]);
 
