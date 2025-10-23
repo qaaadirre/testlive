@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import './HeartBackground.css'; // Also make sure this CSS file exists
+import './HeartBackground.css';
 
 const HeartBackground = () => {
   const [hearts, setHearts] = useState([]);
 
   useEffect(() => {
-    const heartCount = 20;
+    const heartCount = 25;
     const newHearts = [];
     for (let i = 0; i < heartCount; i++) {
       newHearts.push({
         id: i,
         left: Math.random() * 100,
-        size: Math.random() * 20 + 10,
+        size: Math.random() * 25 + 15,
         delay: Math.random() * 5
       });
     }
