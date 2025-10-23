@@ -4,7 +4,7 @@ const TypeWriter = () => {
   const name = process.env.REACT_APP_NAME || 'Qaaadir';
   const texts = [
     `Hi ${name}~`,
-    "Do you know thaaat!"
+    `Do you know thaaat!`
   ];
 
   const [displayText, setDisplayText] = useState('');
