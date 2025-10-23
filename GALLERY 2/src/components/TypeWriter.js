@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 const TypeWriter = () => {
   const name = process.env.REACT_APP_NAME || 'Qaaadir';
   const texts = [
-    `Hi ${name}~`,
-    `Do you know thaaat!`
+    `Hi ${name}~  Do you know that , this is our friendship days count  till now `
   ];
 
   const [displayText, setDisplayText] = useState('');
