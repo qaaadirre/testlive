@@ -266,10 +266,10 @@ const App = () => {
               <MessageCircle className="text-orange-500" size={28} />
               <h2 className="text-xl sm:text-2xl font-bold text-gray-800">A Message From My Heart</h2>
             </div>
-            <p className="text-sm sm:text-lg text-gray-700 leading-relaxed italic text-center font-light">
-              "In the vast ocean that separates our lands, our friendship stands as a beautiful bridge. 
-              You've colored my world with joy, laughter, and precious memories that I'll cherish forever. 
-              No distance can diminish the bond we share. Thank you for being such an amazing friend! 🌸"
+            <p className="text-sm sm:text-lg text-gray-700 leading-relaxed italic text-center font-light">🌙 “Across the vast ocean that separates our lands, 
+            Allah has blessed our hearts with a bond that distance cannot break.
+            Our friendship is a bridge built with faith, kindness, and sincere love for His sake. You’ve brought joy, laughter, and memories that I will cherish always. 
+            Alhamdulillah for a friend like you — a true blessing from Allah. May He keep our hearts connected and our friendship strong, no matter how far we are. 🤍
             </p>
             <div className="mt-4 sm:mt-6 flex items-center justify-center gap-3 text-orange-600">
               <Heart className="heart-pulse" size={18} fill="currentColor" />
