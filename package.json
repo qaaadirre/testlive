@@ -1,56 +1,34 @@
 {
-  "name": "special-friendship-gallery",
+  "name": "live-streaming-platform",
   "version": "1.0.0",
-  "description": "A beautiful memory gallery for special friendships",
-  "private": true,
+  "description": "A comprehensive live streaming platform with admin dashboard and public viewing",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite"
+  },
+  "keywords": [
+    "live-streaming",
+    "webcam",
+    "react",
+    "admin-dashboard",
+    "chat",
+    "webrtc"
+  ],
   "author": "Your Name",
   "license": "MIT",
-  "keywords": [
-    "friendship",
-    "gallery",
-    "memories",
-    "love",
-    "special"
-  ],
-  "homepage": ".",
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "lucide-react": "^0.263.1",
-    "web-vitals": "^2.1.4"
+    "lucide-react": "^0.263.1"
   },
   "devDependencies": {
-    "tailwindcss": "^3.3.0",
-    "postcss": "^8.4.24",
-    "autoprefixer": "^10.4.14"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "engines": {
-    "node": "20.17.0",
-    "npm": "10.x"
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "vite": "^5.0.8"
   }
 }
