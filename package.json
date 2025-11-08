@@ -1,29 +1,24 @@
 {
-  "name": "live-streaming-platform",
+  "name": "live-streaming-platform-fullstack",
   "version": "1.0.0",
-  "description": "A comprehensive live streaming platform with admin dashboard and public viewing",
-  "main": "index.js",
+  "description": "Full-stack live streaming platform with real-time video transmission",
+  "main": "server.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "start": "vite"
+    "start": "node server.js"
   },
   "keywords": [
     "live-streaming",
-    "webcam",
-    "react",
-    "admin-dashboard",
-    "chat",
-    "webrtc"
+    "websocket",
+    "socket.io",
+    "real-time"
   ],
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "lucide-react": "^0.263.1"
-  },
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1"
+  }
+,
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.16",
