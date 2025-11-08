@@ -1,453 +1,469 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { 
-  MapPin, Globe, Heart, X, ChevronLeft, ChevronRight, Star, Plane,
-  MessageCircle, Camera, Sparkles, Music, Gift
-} from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Video, Users, MessageSquare, Send, LogOut, Eye, Share2, Heart, Radio, Settings, Lock, Shield } from 'lucide-react';
 
-// Tailwind CSS Utility Styles for Animation and Custom Classes
-// We assume these custom utilities are defined or interpreted by the Tailwind environment:
-// - .animate-float: For FloatingHearts
-// - .animate-glow: For Music Button
-// - .animate-bar: For Music Visualizer
-// - .animate-bounce-custom: For Plane icon
-// - .heart-pulse: For Footer Hearts
-// - .gradient-text: For text color gradient
-// - .glass-effect: For the Special Message box
+const LiveStreamApp = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [loginForm, setLoginForm] = useState({ username: '', password: '' });
+  const [viewers, setViewers] = useState(0);
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [likes, setLikes] = useState(0);
+  const [showSettings, setShowSettings] = useState(false);
+  const [streamTitle, setStreamTitle] = useState('Live Stream');
+  const [streamDescription, setStreamDescription] = useState('Welcome to the live stream!');
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
 
-const App = () => {
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [loaded, setLoaded] = useState(false);
-  const [musicPlaying, setMusicPlaying] = useState(false);
+  // Simulated database for admin credentials
+  const adminCredentials = { username: 'admin', password: 'admin123' };
 
-  const audioRef = useRef(null);
-
-  // Environment variables
-  const placename = process.env.REACT_APP_PLACE_NAME || 'INDONESIA'; // Default fallback updated for consistency
-  const photosPath = process.env.REACT_APP_PHOTOS_PATH || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/qaaadir';
-  const musicUrl = process.env.REACT_APP_MUSIC_URL || 'https://raw.githubusercontent.com/qaaadirre/INDOGF/refs/heads/main/A/B/C/D/E/F/G/H/I/M/N/O/GDGDG/DJDJD/DJDJDJGDJGJD/DJDHJJ/lia/tosanaina.mp3';
-
-  const photos = useMemo(() => [
-    { id: 1, src: `${photosPath}/photo1.jpg`, caption: 'First Beautiful Memory 🌸', location: 'Special Place', date: '2025' },
-    { id: 2, src: `${photosPath}/photo2.jpg`, caption: 'Precious Moments Together 💫', location: 'Heartwarming Spot', date: '2025' },
-    { id: 3, src: `${photosPath}/photo3.jpg`, caption: 'Unforgettable Times ✨', location: 'Memory Lane', date: '2025' },
-    { id: 4, src: `${photosPath}/photo4.jpg`, caption: 'Wonderful Days 🌟', location: 'Happy Place', date: '2025' },
-    { id: 5, src: `${photosPath}/photo5.jpg`, caption: 'Amazing Memories 💖', location: 'Special Corner', date: '2025' },
-    { id: 6, src: `${photosPath}/photo6.jpg`, caption: 'Cherished Moments 🌈', location: 'Beautiful Memory', date: '2025' },
-  ], [photosPath]);
-
-  // Simulate loading delay for initial animation transition
   useEffect(() => {
-    setTimeout(() => setLoaded(true), 300);
-  }, []);
-
-  // Lightbox Handlers
-  const openPhoto = useCallback((photo, index) => { setSelectedPhoto(photo); setCurrentIndex(index); }, []);
-  const closePhoto = useCallback(() => setSelectedPhoto(null), []);
-  const nextPhoto = useCallback(() => { 
-    const newIndex = (currentIndex + 1) % photos.length; 
-    setCurrentIndex(newIndex); 
-    setSelectedPhoto(photos[newIndex]); 
-  }, [currentIndex, photos]);
-  const prevPhoto = useCallback(() => { 
-    const newIndex = (currentIndex - 1 + photos.length) % photos.length; 
-    setCurrentIndex(newIndex); 
-    setSelectedPhoto(photos[newIndex]); 
-  }, [currentIndex, photos]);
-
-  // Music Controls
-  const toggleMusic = useCallback(() => {
-    if (!audioRef.current) return;
-    if (musicPlaying) {
-      audioRef.current.pause();
-    } else {
-      // Attempt to play, catch potential autoplay errors
-      audioRef.current.play().catch(err => console.log('Autoplay blocked:', err));
+    if (isStreaming) {
+      const interval = setInterval(() => {
+        setViewers(prev => Math.max(0, prev + Math.floor(Math.random() * 5) - 2));
+      }, 3000);
+      return () => clearInterval(interval);
     }
-    setMusicPlaying(!musicPlaying);
-  }, [musicPlaying]);
+  }, [isStreaming]);
 
-  // Keyboard Navigation for Lightbox
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (!selectedPhoto) return;
-      if (e.key === 'Escape') closePhoto();
-      if (e.key === 'ArrowRight') nextPhoto();
-      if (e.key === 'ArrowLeft') prevPhoto();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedPhoto, currentIndex, nextPhoto, prevPhoto, closePhoto]);
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (loginForm.username === adminCredentials.username && 
+        loginForm.password === adminCredentials.password) {
+      setIsAdmin(true);
+      setLoginForm({ username: '', password: '' });
+    } else {
+      alert('Invalid credentials! Use username: admin, password: admin123');
+    }
+  };
 
-  // Decorative Component
-  const FloatingHearts = () => (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      {[...Array(15)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute text-red-400 opacity-20 animate-float"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            fontSize: `${20 + Math.random() * 30}px`,
-            animationDelay: `${i * 0.7}s`,
-            animationDuration: `${4 + Math.random() * 4}s`
-          }}
-        >❤️</div>
-      ))}
-    </div>
-  );
+  const startStream = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { width: 1280, height: 720 }, 
+        audio: true 
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+      }
+      setIsStreaming(true);
+      setViewers(Math.floor(Math.random() * 50) + 10);
+    } catch (err) {
+      alert('Could not access camera/microphone. Please grant permissions.');
+    }
+  };
 
-  return (
-    // Responsive root container
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-rose-50 to-pink-50 relative overflow-hidden">
-      <style jsx global>{`
-        /* Custom Keyframes and Utility Classes */
-        @keyframes float {
-          0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-          25% { opacity: 0.2; }
-          50% { transform: translateY(-50vh) rotate(5deg); }
-          75% { opacity: 0.1; }
-          100% { transform: translateY(-100vh) rotate(-5deg); opacity: 0; }
-        }
-        .animate-float {
-          animation: float;
-          animation-iteration-count: infinite;
-        }
+  const stopStream = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    setIsStreaming(false);
+    setViewers(0);
+  };
 
-        .heart-pulse {
-          animation: pulse 1s ease-in-out infinite;
-        }
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.1); }
-        }
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (newMessage.trim()) {
+      const msg = {
+        id: Date.now(),
+        user: isAdmin ? 'Admin' : `Viewer${Math.floor(Math.random() * 1000)}`,
+        text: newMessage,
+        timestamp: new Date().toLocaleTimeString(),
+        isAdmin: isAdmin
+      };
+      setMessages(prev => [...prev, msg]);
+      setNewMessage('');
+    }
+  };
 
-        .animate-glow {
-          box-shadow: 0 0 10px #f97316, 0 0 20px #dc2626;
-        }
+  const handleLike = () => {
+    setLikes(prev => prev + 1);
+  };
 
-        @keyframes bar-animation {
-          0%, 100% { height: 20%; }
-          50% { height: 100%; }
-        }
-        .animate-bar {
-          animation: bar-animation 0.6s ease-in-out infinite alternate;
-        }
-        
-        .gradient-text {
-          background-image: linear-gradient(to right, #f97316, #dc2626);
-        }
-        
-        /* Glassmorphism Effect for Modal/Message Box */
-        .glass-effect {
-          background-color: rgba(255, 255, 255, 0.2);
-          backdrop-filter: blur(10px);
-        }
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Stream link copied to clipboard!');
+  };
 
-        /* Custom Bounce for Plane */
-        @keyframes bounce-custom {
-          0%, 100% { transform: translateY(0) rotate(5deg); }
-          50% { transform: translateY(-5px) rotate(-5deg); }
-        }
-        .animate-bounce-custom {
-          animation: bounce-custom 1.5s infinite ease-in-out;
-        }
+  const handleLogout = () => {
+    stopStream();
+    setIsAdmin(false);
+    setMessages([]);
+    setLikes(0);
+  };
 
-        /* Float for Emojis */
-        .float-element {
-          animation: float-element-animation 3s ease-in-out infinite alternate;
-        }
-        @keyframes float-element-animation {
-          0% { transform: translateY(0); }
-          100% { transform: translateY(-5px); }
-        }
-
-        /* Decorative background pattern (Mocked) */
-        .bg-love-pattern {
-          background-image: radial-gradient(#f97316 1px, transparent 1px), radial-gradient(#dc2626 1px, transparent 1px);
-          background-size: 20px 20px;
-          background-position: 0 0, 10px 10px;
-        }
-
-        /* Custom Shadow for Gallery Cards */
-        .shadow-3xl {
-          box-shadow: 0 20px 25px -5px rgba(249, 115, 22, 0.3), 0 10px 10px -5px rgba(220, 38, 38, 0.3);
-        }
-      `}</style>
-
-      <FloatingHearts />
-      
-      {/* Audio element */}
-      <audio ref={audioRef} src={musicUrl} loop />
-
-      {/* Music Button with Visualizer (Fixed position for all sizes) */}
-      <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 flex items-center gap-3">
-        <button
-          onClick={toggleMusic}
-          className={`p-3 sm:p-4 rounded-full shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300/50 ${
-            musicPlaying
-              ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white animate-glow'
-              : 'bg-white/80 backdrop-blur-sm text-orange-600 hover:bg-white'
-          }`}
-          aria-label={musicPlaying ? "Pause music" : "Play music"}
-        >
-          <Music size={24} fill={musicPlaying ? 'currentColor' : 'none'} />
-        </button>
-
-        {musicPlaying && (
-          <div className="flex gap-[3px] items-end h-5">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="w-[3px] bg-orange-500 rounded-full animate-bar"
-                style={{ animationDelay: `${i * 0.15}s` }}
-              ></div>
-            ))}
+  // Admin Login Page
+  if (!isAdmin && window.location.hash === '#admin') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/20">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mb-4">
+              <Shield className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">Admin Login</h1>
+            <p className="text-gray-300">Secure access to streaming dashboard</p>
           </div>
-        )}
-      </div>
-
-    {/* Background pattern */}
-    <div className="absolute inset-0 bg-love-pattern opacity-10 z-0"></div>
-
-      {/* Hero Section */}
-      <header className="relative pt-16 pb-20 px-4 z-10">
-        <div className={`max-w-6xl mx-auto text-center transform transition-all duration-1000 ${
-          loaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
-        }`}>
           
-          {/* Animated Title */}
-          <div className="mb-6 sm:mb-8">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-3 gradient-text bg-clip-text text-transparent">
-              Our Special Bond
-            </h1>
-            <p className="text-lg md:text-xl lg:text-2xl text-gray-700 font-light max-w-4xl mx-auto px-2">
-              Where Distance Fades and Friendship Shines ✨
-            </p>
-          </div>
-
-          {/* Flags and Distance (Responsive Layout) */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-8 mb-10 sm:mb-12">
-            
-            {/* My Location */}
-            <div className="text-center transform hover:scale-110 transition-transform duration-300">
-              {/* Responsive Emoji Size: text-5xl on mobile, text-7xl on md+ */}
-              <div className="text-5xl md:text-7xl mb-2 float-element">ME</div>
-              <p className="text-base sm:text-lg font-semibold text-gray-800">INDIA</p>
-              <p className="text-xs sm:text-sm text-gray-600">Kochi</p>
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div>
+              <label className="block text-white text-sm font-medium mb-2">Username</label>
+              <input
+                type="text"
+                value={loginForm.username}
+                onChange={(e) => setLoginForm({...loginForm, username: e.target.value})}
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="Enter username"
+                required
+              />
             </div>
             
-            {/* Distance Indicator */}
-            <div className="flex flex-col items-center py-4">
-              <div className="relative">
-                <Plane className="text-orange-500 animate-bounce-custom mb-2" size={40} />
-                <Sparkles className="absolute -top-2 -right-2 text-yellow-500 animate-pulse" size={20} />
-              </div>
-              <div className="flex items-center gap-2 text-base sm:text-lg text-gray-700 font-medium mt-1">
-                <Globe size={18} />
-                <span>~4,500 km apart</span>
-              </div>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1 font-light">but hearts connected 💝</p>
+            <div>
+              <label className="block text-white text-sm font-medium mb-2">Password</label>
+              <input
+                type="password"
+                value={loginForm.password}
+                onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="Enter password"
+                required
+              />
             </div>
-
-            {/* Your Location */}
-            <div className="text-center transform hover:scale-110 transition-transform duration-300">
-              {/* Responsive Emoji Size: text-5xl on mobile, text-7xl on md+ */}
-              <div className="text-5xl md:text-7xl mb-2 float-element" style={{animationDelay: '1s'}}>YOU</div>
-              <p className="text-base sm:text-lg font-semibold text-gray-800">{placename}</p>
-              <p className="text-xs sm:text-sm text-gray-600">Beautiful Soul</p>
-            </div>
-          </div>
-
-          {/* Special Message (Responsive Padding and Text Size) */}
-          <div className="mt-8 max-w-3xl mx-auto glass-effect rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/50">
-            <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-              <MessageCircle className="text-orange-500" size={28} />
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-800">A Message From My Heart</h2>
-            </div>
-            <p className="text-sm sm:text-lg text-gray-700 leading-relaxed italic text-center font-light">🌙 “Across the vast ocean that separates our lands, 
-            Allah has blessed our hearts with a bond that distance cannot break.
-            Our friendship is a bridge built with faith, kindness, and sincere love for His sake. You’ve brought joy, laughter, and memories that I will cherish always. 
-            Alhamdulillah for a friend like you — a true blessing from Allah. May He keep our hearts connected and our friendship strong, no matter how far we are. 🤍
-            </p>
-            <div className="mt-4 sm:mt-6 flex items-center justify-center gap-3 text-orange-600">
-              <Heart className="heart-pulse" size={18} fill="currentColor" />
-              <span className="font-semibold text-sm sm:text-base">From your friend in India</span>
-              <Heart className="heart-pulse" size={18} fill="currentColor" />
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Photo Gallery (Responsive Grid) */}
-      <main className="max-w-7xl mx-auto px-4 pb-24 relative z-10">
-        <div className="text-center mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-            <Camera className="text-orange-500" size={32} />
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800">Our Precious Memories</h2>
-            <Camera className="text-orange-500" size={32} />
-          </div>
-          <p className="text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Every snapshot tells the beautiful story of our friendship - 
-            moments filled with laughter, love, and unforgettable memories
-          </p>
-        </div>
-
-        {/* Gallery grid adapts perfectly: 1 column on mobile, 2 on medium, 3 on large */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {photos.map((photo, index) => (
-            <div
-              key={photo.id}
-              className={`group relative cursor-pointer transform transition-all duration-700 ${
-                loaded ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-95'
-              }`}
-              style={{ transitionDelay: `${index * 150}ms` }}
-              onClick={() => openPhoto(photo, index)}
+            
+            <button
+              type="submit"
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg"
             >
-              {/* Photo Card */}
-              <div className="relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br from-orange-100 to-pink-100 border-2 border-white/50 group-hover:border-orange-300/50 transition-all duration-500 group-hover:shadow-3xl">
-                
-                {/* Photo Container */}
-                <div className="aspect-square relative overflow-hidden">
-                  
-                  {/* Decorative Corner */}
-                  <div className="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-bl from-orange-400 to-pink-500 opacity-10 rounded-bl-full"></div>
-                  
-                  {/* Main Photo */}
-                  <img
-                    src={photo.src}
-                    alt={photo.caption}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                    // Fallback to SVG placeholder on error
-                    onError={(e) => {
-                      e.target.src = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"%3E%3Cdefs%3E%3ClinearGradient id="grad" x1="0%25" y1="0%25" x2="100%25" y2="100%25"%3E%3Cstop offset="0%25" style="stop-color:%23fed7aa;stop-opacity:1" /%3E%3Cstop offset="100%25" style="stop-color:%23fecaca;stop-opacity:1" /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="400" height="400" fill="url(%23grad)"/%3E%3Ctext x="50%25" y="42%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="48" fill="%23c2410c"%3E%F0%9F%93%B7%3C/text%3E%3Ctext x="50%25" y="60%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="%23dc2626"%3E${encodeURIComponent(photo.caption)}%3C/text%3E%3C/svg%3E`;
-                    }}
-                  />
-                  
-                  {/* Overlay (Responsive Padding) */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-4 sm:p-6">
-                    <p className="text-white text-lg sm:text-xl font-semibold mb-2 sm:mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                      {photo.caption}
-                    </p>
-                    <div className="flex items-center justify-between transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      <div className="flex items-center gap-2 text-white/90">
-                        <MapPin size={16} />
-                        <span className="text-xs sm:text-sm">{photo.location}</span>
-                      </div>
-                      <div className="flex gap-1">
-                        {[...Array(3)].map((_, i) => (
-                          <Star key={i} className="text-yellow-400" size={16} fill="currentColor" />
-                        ))}
-                      </div>
+              <Lock className="inline w-5 h-5 mr-2" />
+              Sign In
+            </button>
+          </form>
+          
+          <div className="mt-6 text-center">
+            <p className="text-gray-400 text-sm">Demo credentials: admin / admin123</p>
+            <a href="#" className="text-purple-400 hover:text-purple-300 text-sm mt-2 inline-block">
+              Back to Public View
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Admin Dashboard
+  if (isAdmin) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900">
+        {/* Admin Header */}
+        <div className="bg-black/40 backdrop-blur-md border-b border-white/10">
+          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                <Video className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-white text-xl font-bold">Admin Dashboard</h1>
+                <p className="text-gray-400 text-sm">Streaming Control Center</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              {isStreaming && (
+                <div className="flex items-center gap-2 bg-red-500/20 px-4 py-2 rounded-full border border-red-500/50">
+                  <Radio className="w-4 h-4 text-red-500 animate-pulse" />
+                  <span className="text-red-500 font-semibold">LIVE</span>
+                </div>
+              )}
+              <button
+                onClick={() => setShowSettings(!showSettings)}
+                className="p-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition"
+              >
+                <Settings className="w-5 h-5" />
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Video Preview */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="bg-black/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  muted
+                  className="w-full aspect-video bg-black"
+                  style={{ transform: 'scaleX(-1)' }}
+                />
+                <div className="p-4 bg-gradient-to-t from-black/60 to-transparent">
+                  <div className="flex justify-between items-center">
+                    {!isStreaming ? (
+                      <button
+                        onClick={startStream}
+                        className="flex-1 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all transform hover:scale-105 shadow-lg"
+                      >
+                        <Video className="inline w-6 h-6 mr-2" />
+                        Start Streaming
+                      </button>
+                    ) : (
+                      <button
+                        onClick={stopStream}
+                        className="flex-1 py-4 bg-gradient-to-r from-red-500 to-pink-600 text-white font-bold rounded-xl hover:from-red-600 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg"
+                      >
+                        <Radio className="inline w-6 h-6 mr-2" />
+                        Stop Streaming
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10">
+                  <div className="flex items-center gap-3">
+                    <Eye className="w-8 h-8 text-blue-400" />
+                    <div>
+                      <p className="text-gray-400 text-sm">Viewers</p>
+                      <p className="text-white text-2xl font-bold">{viewers}</p>
                     </div>
                   </div>
-
-                  {/* Photo Number Badge */}
-                  <div className="absolute top-4 left-4 sm:top-5 sm:left-5 bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 py-1 shadow-lg">
-                    <span className="text-xs sm:text-sm font-bold text-orange-600">#{String(index + 1).padStart(2, '0')}</span>
+                </div>
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10">
+                  <div className="flex items-center gap-3">
+                    <Heart className="w-8 h-8 text-red-400" />
+                    <div>
+                      <p className="text-gray-400 text-sm">Likes</p>
+                      <p className="text-white text-2xl font-bold">{likes}</p>
+                    </div>
                   </div>
-
-                  {/* Date Badge */}
-                  <div className="absolute top-4 right-4 sm:top-5 sm:right-5 bg-black/70 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 py-1">
-                    <span className="text-xs sm:text-sm font-medium text-white">{photo.date}</span>
+                </div>
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10">
+                  <div className="flex items-center gap-3">
+                    <MessageSquare className="w-8 h-8 text-green-400" />
+                    <div>
+                      <p className="text-gray-400 text-sm">Messages</p>
+                      <p className="text-white text-2xl font-bold">{messages.length}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-      </main>
 
-      {/* Lightbox Modal (Fully Responsive) */}
-      {selectedPhoto && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
-          
-          {/* Close Button (Large touch target) */}
-          <button
-            onClick={closePhoto}
-            className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white hover:text-orange-400 transition-all duration-300 z-10 bg-white/10 rounded-full p-3 sm:p-4 backdrop-blur-sm hover:bg-white/20 hover:scale-110"
-            aria-label="Close photo"
-          >
-            <X size={28} />
-          </button>
-
-          {/* Previous Button (Large touch target) */}
-          <button
-            onClick={prevPhoto}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-orange-400 transition-all duration-300 z-10 bg-white/10 rounded-full p-3 sm:p-4 backdrop-blur-sm hover:bg-white/20 hover:scale-110"
-            aria-label="Previous photo"
-          >
-            <ChevronLeft size={32} />
-          </button>
-
-          {/* Next Button (Large touch target) */}
-          <button
-            onClick={nextPhoto}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-orange-400 transition-all duration-300 z-10 bg-white/10 rounded-full p-3 sm:p-4 backdrop-blur-sm hover:bg-white/20 hover:scale-110"
-            aria-label="Next photo"
-          >
-            <ChevronRight size={32} />
-          </button>
-
-          <div className="max-w-6xl max-h-[95vh] flex flex-col items-center">
-            {/* Image display (constrained by viewport height) */}
-            <img
-              src={selectedPhoto.src}
-              alt={selectedPhoto.caption}
-              className="w-full max-w-full max-h-[60vh] sm:max-h-[75vh] object-contain rounded-xl sm:rounded-2xl shadow-2xl"
-              onError={(e) => {
-                e.target.src = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"%3E%3Cdefs%3E%3ClinearGradient id="grad" x1="0%25" y1="0%25" x2="100%25" y2="100%25"%3E%3Cstop offset="0%25" style="stop-color:%23fed7aa;stop-opacity:1" /%3E%3Cstop offset="100%25" style="stop-color:%23fecaca;stop-opacity:1" /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="800" height="600" fill="url(%23grad)"/%3E%3Ctext x="50%25" y="45%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="72" fill="%23c2410c"%3E%F0%9F%93%B7%3C/text%3E%3Ctext x="50%25" y="60%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="28" fill="%23dc2626"%3E${encodeURIComponent(selectedPhoto.caption)}%3C/text%3E%3C/svg%3E`;
-              }}
-            />
-            {/* Caption (Responsive Padding and Text Size) */}
-            <div className="mt-4 sm:mt-8 text-center glass-effect rounded-2xl p-4 sm:p-8 backdrop-blur-md border border-white/20 w-full">
-              <h3 className="text-white text-xl sm:text-3xl font-bold mb-3 sm:mb-4">{selectedPhoto.caption}</h3>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-gray-300">
-                <div className="flex items-center gap-2">
-                  <MapPin size={18} />
-                  <span>{selectedPhoto.location}</span>
+            {/* Chat & Settings */}
+            <div className="space-y-4">
+              {showSettings && (
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                  <h3 className="text-white font-bold mb-4">Stream Settings</h3>
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      value={streamTitle}
+                      onChange={(e) => setStreamTitle(e.target.value)}
+                      className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg text-white placeholder-gray-400"
+                      placeholder="Stream title"
+                    />
+                    <textarea
+                      value={streamDescription}
+                      onChange={(e) => setStreamDescription(e.target.value)}
+                      className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg text-white placeholder-gray-400 resize-none"
+                      rows="3"
+                      placeholder="Stream description"
+                    />
+                  </div>
                 </div>
-                <div className="hidden sm:block w-1 h-1 bg-gray-400 rounded-full"></div>
-                <span>{selectedPhoto.date}</span>
-              </div>
-              <p className="text-gray-400 text-sm sm:text-lg mt-3 sm:mt-4">
-                Memory {currentIndex + 1} of {photos.length} • Forever Cherished 💖
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+              )}
 
-      {/* Footer (Responsive Padding and Text Size) */}
-      <footer className="relative bg-gradient-to-r from-orange-100/80 to-pink-100/80 border-t border-orange-200/50 py-12 sm:py-16 mt-16 sm:mt-20 backdrop-blur-sm z-10">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-4 sm:gap-6 mb-6 sm:mb-8">
-            <span className="text-3xl sm:text-4xl transform hover:scale-110 transition-transform duration-300">ME</span>
-            <Gift className="text-red-500 heart-pulse" size={40} />
-            <span className="text-3xl sm:text-4xl transform hover:scale-110 transition-transform duration-300">YOU</span>
-          </div>
-          <p className="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4 gradient-text bg-clip-text text-transparent">
-            Friendship Knows No Borders
-          </p>
-          <p className="text-sm sm:text-lg text-gray-700 mb-6 max-w-2xl mx-auto leading-relaxed">
-            This digital memory book is a small token of appreciation for the incredible friendship we share. 
-            No matter the distance, you'll always have a special place in my heart.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-gray-600 text-sm sm:text-base">
-            <div className="flex items-center gap-2">
-              <Heart size={18} className="text-red-500" fill="currentColor" />
-              <span>Made with Love</span>
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex flex-col" style={{ height: '500px' }}>
+                <div className="p-4 border-b border-white/10">
+                  <h3 className="text-white font-bold flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5" />
+                    Live Chat
+                  </h3>
+                </div>
+                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                  {messages.map((msg) => (
+                    <div key={msg.id} className="bg-black/30 rounded-lg p-3">
+                      <div className="flex justify-between items-start mb-1">
+                        <span className={`font-semibold ${msg.isAdmin ? 'text-yellow-400' : 'text-blue-400'}`}>
+                          {msg.user}
+                        </span>
+                        <span className="text-gray-500 text-xs">{msg.timestamp}</span>
+                      </div>
+                      <p className="text-gray-200 text-sm">{msg.text}</p>
+                    </div>
+                  ))}
+                </div>
+                <form onSubmit={handleSendMessage} className="p-4 border-t border-white/10">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      className="flex-1 px-4 py-2 bg-black/30 border border-white/20 rounded-lg text-white placeholder-gray-400"
+                      placeholder="Type a message..."
+                    />
+                    <button
+                      type="submit"
+                      className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600"
+                    >
+                      <Send className="w-5 h-5" />
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
-            <div className="hidden sm:block w-1 h-1 bg-gray-400 rounded-full"></div>
-            <span>INDIA to {placename}</span>
-            <div className="hidden sm:block w-1 h-1 bg-gray-400 rounded-full"></div>
-            <span>Forever Friends</span>
           </div>
         </div>
-      </footer>
+      </div>
+    );
+  }
+
+  // Public View
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+      {/* Public Header */}
+      <div className="bg-black/40 backdrop-blur-md border-b border-white/10">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <Video className="w-6 h-6 text-white" />
+            </div>
+            <h1 className="text-white text-xl font-bold">Live Stream</h1>
+          </div>
+          <a
+            href="#admin"
+            className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition flex items-center gap-2"
+          >
+            <Lock className="w-4 h-4" />
+            Admin Login
+          </a>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Video Player */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="bg-black/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10">
+              <div className="relative">
+                {isStreaming ? (
+                  <video
+                    autoPlay
+                    className="w-full aspect-video bg-black"
+                  />
+                ) : (
+                  <div className="w-full aspect-video bg-black flex items-center justify-center">
+                    <div className="text-center">
+                      <Video className="w-20 h-20 text-gray-600 mx-auto mb-4" />
+                      <p className="text-gray-400 text-xl font-semibold">Stream Offline</p>
+                      <p className="text-gray-500 text-sm mt-2">Check back later for live content</p>
+                    </div>
+                  </div>
+                )}
+                {isStreaming && (
+                  <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-500 px-3 py-1 rounded-full">
+                    <Radio className="w-4 h-4 text-white animate-pulse" />
+                    <span className="text-white font-semibold text-sm">LIVE</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div>
+                  <h2 className="text-white text-2xl font-bold mb-2">{streamTitle}</h2>
+                  <p className="text-gray-300">{streamDescription}</p>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={handleLike}
+                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full hover:from-red-600 hover:to-pink-600 transition-all transform hover:scale-105"
+                  >
+                    <Heart className="w-5 h-5" />
+                    <span className="font-semibold">{likes}</span>
+                  </button>
+                  <button
+                    onClick={handleShare}
+                    className="flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition"
+                  >
+                    <Share2 className="w-5 h-5" />
+                    Share
+                  </button>
+                  <div className="flex items-center gap-2 px-6 py-3 bg-white/10 rounded-full">
+                    <Eye className="w-5 h-5 text-blue-400" />
+                    <span className="text-white font-semibold">{viewers} watching</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Live Chat */}
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex flex-col" style={{ height: '600px' }}>
+            <div className="p-4 border-b border-white/10">
+              <h3 className="text-white font-bold flex items-center gap-2">
+                <MessageSquare className="w-5 h-5" />
+                Live Chat
+                <span className="ml-auto text-sm text-gray-400">{messages.length} messages</span>
+              </h3>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+              {messages.length === 0 ? (
+                <div className="text-center text-gray-400 py-8">
+                  <MessageSquare className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                  <p>No messages yet</p>
+                  <p className="text-sm">Be the first to say hello!</p>
+                </div>
+              ) : (
+                messages.map((msg) => (
+                  <div key={msg.id} className="bg-black/30 rounded-lg p-3 animate-fade-in">
+                    <div className="flex justify-between items-start mb-1">
+                      <span className={`font-semibold ${msg.isAdmin ? 'text-yellow-400' : 'text-blue-400'}`}>
+                        {msg.user}
+                        {msg.isAdmin && <span className="ml-2 text-xs bg-yellow-500/20 px-2 py-0.5 rounded">ADMIN</span>}
+                      </span>
+                      <span className="text-gray-500 text-xs">{msg.timestamp}</span>
+                    </div>
+                    <p className="text-gray-200 text-sm">{msg.text}</p>
+                  </div>
+                ))
+              )}
+            </div>
+            <form onSubmit={handleSendMessage} className="p-4 border-t border-white/10">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  className="flex-1 px-4 py-3 bg-black/30 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="Say something..."
+                />
+                <button
+                  type="submit"
+                  className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-105"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default App;
+export default LiveStreamApp;
