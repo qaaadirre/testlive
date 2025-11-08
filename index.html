@@ -24,6 +24,19 @@
         .animate-fade-in {
             animation: fadeIn 0.3s ease-in;
         }
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        .pulse-ring {
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
     </style>
 </head>
 <body>
@@ -32,37 +45,15 @@
     <script type="text/babel">
         const { useState, useRef, useEffect } = React;
 
-        // Simulated broadcast state (in real app, this would be a backend/WebSocket)
-        const broadcastState = {
-            isLive: false,
-            streamData: null,
-            listeners: []
-        };
+        // Global broadcast channel using localStorage for cross-tab communication
+        const BROADCAST_KEY = 'livestream_broadcast_state';
+        const MESSAGE_KEY = 'livestream_messages';
+        const LIKES_KEY = 'livestream_likes';
 
-        const updateBroadcast = (isLive, streamData = null) => {
-            broadcastState.isLive = isLive;
-            broadcastState.streamData = streamData;
-            broadcastState.listeners.forEach(listener => listener());
-        };
-
-        const subscribeToBroadcast = (listener) => {
-            broadcastState.listeners.push(listener);
-            return () => {
-                const index = broadcastState.listeners.indexOf(listener);
-                if (index > -1) broadcastState.listeners.splice(index, 1);
-            };
-        };
-
-        // Lucide Icons as inline SVG components
+        // Icons
         const Video = ({ className = "w-6 h-6" }) => (
             <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-        );
-
-        const Users = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
         );
 
@@ -132,37 +123,141 @@
 
         const LiveStreamApp = () => {
             const [isAdmin, setIsAdmin] = useState(false);
-            const [isStreaming, setIsStreaming] = useState(false);
             const [loginForm, setLoginForm] = useState({ username: '', password: '' });
+            const [isStreaming, setIsStreaming] = useState(false);
+            const [streamTitle, setStreamTitle] = useState('Live Stream');
+            const [streamDescription, setStreamDescription] = useState('Welcome to the live stream!');
+            const [showSettings, setShowSettings] = useState(false);
             const [viewers, setViewers] = useState(0);
             const [messages, setMessages] = useState([]);
             const [newMessage, setNewMessage] = useState('');
             const [likes, setLikes] = useState(0);
-            const [showSettings, setShowSettings] = useState(false);
-            const [streamTitle, setStreamTitle] = useState('Live Stream');
-            const [streamDescription, setStreamDescription] = useState('Welcome to the live stream!');
-            const [, forceUpdate] = useState({});
             const videoRef = useRef(null);
             const streamRef = useRef(null);
 
             const adminCredentials = { username: 'admin', password: 'admin123' };
 
-            // Subscribe to broadcast changes (for public view)
+            // Load initial state from localStorage
             useEffect(() => {
-                const unsubscribe = subscribeToBroadcast(() => {
-                    forceUpdate({});
-                });
-                return unsubscribe;
+                try {
+                    const savedBroadcast = localStorage.getItem(BROADCAST_KEY);
+                    if (savedBroadcast) {
+                        const data = JSON.parse(savedBroadcast);
+                        setIsStreaming(data.isLive || false);
+                        setStreamTitle(data.title || 'Live Stream');
+                        setStreamDescription(data.description || 'Welcome to the live stream!');
+                        setViewers(data.viewers || 0);
+                    }
+
+                    const savedMessages = localStorage.getItem(MESSAGE_KEY);
+                    if (savedMessages) {
+                        setMessages(JSON.parse(savedMessages));
+                    }
+
+                    const savedLikes = localStorage.getItem(LIKES_KEY);
+                    if (savedLikes) {
+                        setLikes(parseInt(savedLikes) || 0);
+                    }
+                } catch (e) {
+                    console.error('Error loading state:', e);
+                }
             }, []);
 
+            // Listen for storage changes (cross-tab communication)
             useEffect(() => {
-                if (isStreaming || broadcastState.isLive) {
+                const handleStorageChange = (e) => {
+                    if (e.key === BROADCAST_KEY && e.newValue) {
+                        try {
+                            const data = JSON.parse(e.newValue);
+                            setIsStreaming(data.isLive || false);
+                            setStreamTitle(data.title || 'Live Stream');
+                            setStreamDescription(data.description || 'Welcome to the live stream!');
+                            setViewers(data.viewers || 0);
+                        } catch (err) {
+                            console.error('Error parsing broadcast state:', err);
+                        }
+                    }
+                    if (e.key === MESSAGE_KEY && e.newValue) {
+                        try {
+                            setMessages(JSON.parse(e.newValue));
+                        } catch (err) {
+                            console.error('Error parsing messages:', err);
+                        }
+                    }
+                    if (e.key === LIKES_KEY && e.newValue) {
+                        try {
+                            setLikes(parseInt(e.newValue) || 0);
+                        } catch (err) {
+                            console.error('Error parsing likes:', err);
+                        }
+                    }
+                };
+
+                window.addEventListener('storage', handleStorageChange);
+                return () => window.removeEventListener('storage', handleStorageChange);
+            }, []);
+
+            // Poll for updates every second (for same-tab updates)
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    try {
+                        const savedBroadcast = localStorage.getItem(BROADCAST_KEY);
+                        if (savedBroadcast) {
+                            const data = JSON.parse(savedBroadcast);
+                            setIsStreaming(data.isLive || false);
+                            setStreamTitle(data.title || 'Live Stream');
+                            setStreamDescription(data.description || 'Welcome to the live stream!');
+                            setViewers(data.viewers || 0);
+                        }
+
+                        const savedMessages = localStorage.getItem(MESSAGE_KEY);
+                        if (savedMessages) {
+                            setMessages(JSON.parse(savedMessages));
+                        }
+
+                        const savedLikes = localStorage.getItem(LIKES_KEY);
+                        if (savedLikes) {
+                            setLikes(parseInt(savedLikes) || 0);
+                        }
+                    } catch (e) {
+                        console.error('Error polling state:', e);
+                    }
+                }, 1000);
+
+                return () => clearInterval(interval);
+            }, []);
+
+            // Simulate viewer count changes
+            useEffect(() => {
+                if (isStreaming) {
                     const interval = setInterval(() => {
-                        setViewers(prev => Math.max(0, prev + Math.floor(Math.random() * 5) - 2));
+                        setViewers(prev => {
+                            const newCount = Math.max(5, prev + Math.floor(Math.random() * 5) - 2);
+                            try {
+                                const broadcast = JSON.parse(localStorage.getItem(BROADCAST_KEY) || '{}');
+                                broadcast.viewers = newCount;
+                                localStorage.setItem(BROADCAST_KEY, JSON.stringify(broadcast));
+                            } catch (e) {
+                                console.error('Error updating viewers:', e);
+                            }
+                            return newCount;
+                        });
                     }, 3000);
                     return () => clearInterval(interval);
                 }
             }, [isStreaming]);
+
+            const updateBroadcastState = (isLive, title = streamTitle, description = streamDescription) => {
+                const data = {
+                    isLive,
+                    title,
+                    description,
+                    viewers: isLive ? Math.floor(Math.random() * 50) + 10 : 0,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem(BROADCAST_KEY, JSON.stringify(data));
+                setViewers(data.viewers);
+            };
 
             const handleLogin = () => {
                 if (loginForm.username === adminCredentials.username && 
@@ -185,11 +280,11 @@
                         streamRef.current = stream;
                     }
                     setIsStreaming(true);
-                    setViewers(Math.floor(Math.random() * 50) + 10);
-                    // Notify all viewers that stream is live
-                    updateBroadcast(true, { title: streamTitle, description: streamDescription });
+                    updateBroadcastState(true, streamTitle, streamDescription);
+                    alert('Stream started! Open a new tab to see it live on the public page.');
                 } catch (err) {
                     alert('Could not access camera/microphone. Please grant permissions.');
+                    console.error('Stream error:', err);
                 }
             };
 
@@ -201,9 +296,7 @@
                     videoRef.current.srcObject = null;
                 }
                 setIsStreaming(false);
-                setViewers(0);
-                // Notify all viewers that stream ended
-                updateBroadcast(false);
+                updateBroadcastState(false);
             };
 
             const handleSendMessage = () => {
@@ -215,13 +308,17 @@
                         timestamp: new Date().toLocaleTimeString(),
                         isAdmin: isAdmin
                     };
-                    setMessages(prev => [...prev, msg]);
+                    const updatedMessages = [...messages, msg];
+                    setMessages(updatedMessages);
+                    localStorage.setItem(MESSAGE_KEY, JSON.stringify(updatedMessages));
                     setNewMessage('');
                 }
             };
 
             const handleLike = () => {
-                setLikes(prev => prev + 1);
+                const newLikes = likes + 1;
+                setLikes(newLikes);
+                localStorage.setItem(LIKES_KEY, newLikes.toString());
             };
 
             const handleShare = () => {
@@ -232,8 +329,6 @@
             const handleLogout = () => {
                 stopStream();
                 setIsAdmin(false);
-                setMessages([]);
-                setLikes(0);
             };
 
             // Admin Login Page
@@ -404,13 +499,23 @@
                                                 <input
                                                     type="text"
                                                     value={streamTitle}
-                                                    onChange={(e) => setStreamTitle(e.target.value)}
+                                                    onChange={(e) => {
+                                                        setStreamTitle(e.target.value);
+                                                        if (isStreaming) {
+                                                            updateBroadcastState(true, e.target.value, streamDescription);
+                                                        }
+                                                    }}
                                                     className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg text-white placeholder-gray-400"
                                                     placeholder="Stream title"
                                                 />
                                                 <textarea
                                                     value={streamDescription}
-                                                    onChange={(e) => setStreamDescription(e.target.value)}
+                                                    onChange={(e) => {
+                                                        setStreamDescription(e.target.value);
+                                                        if (isStreaming) {
+                                                            updateBroadcastState(true, streamTitle, e.target.value);
+                                                        }
+                                                    }}
                                                     className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg text-white placeholder-gray-400 resize-none"
                                                     rows="3"
                                                     placeholder="Stream description"
@@ -491,18 +596,37 @@
                             <div className="lg:col-span-2 space-y-4">
                                 <div className="bg-black/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10">
                                     <div className="relative">
-                                        {broadcastState.isLive ? (
-                                            <div className="w-full aspect-video bg-black flex items-center justify-center">
-                                                <div className="text-center">
-                                                    <div className="relative inline-block">
-                                                        <Video className="w-32 h-32 text-red-500 mx-auto mb-4 animate-pulse" />
+                                        {isStreaming ? (
+                                            <div className="w-full aspect-video bg-gradient-to-br from-red-900 via-purple-900 to-pink-900 flex items-center justify-center relative overflow-hidden">
+                                                <div className="absolute inset-0 opacity-20">
+                                                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white to-transparent animate-pulse"></div>
+                                                </div>
+                                                <div className="text-center z-10">
+                                                    <div className="relative inline-block mb-6">
+                                                        <Video className="w-40 h-40 text-red-500 mx-auto animate-pulse" />
                                                         <div className="absolute inset-0 flex items-center justify-center">
-                                                            <div className="w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+                                                            <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                                                        </div>
+                                                        <div className="absolute inset-0 flex items-center justify-center">
+                                                            <div className="w-4 h-4 bg-red-500 rounded-full pulse-ring"></div>
+                                                        </div>
+                                                        <div className="absolute inset-0 flex items-center justify-center">
+                                                            <div className="w-4 h-4 bg-red-500 rounded-full pulse-ring" style={{animationDelay: '0.5s'}}></div>
                                                         </div>
                                                     </div>
-                                                    <p className="text-red-500 text-2xl font-bold mb-2">🔴 LIVE NOW</p>
-                                                    <p className="text-gray-400 text-lg">Broadcasting in progress</p>
-                                                    <p className="text-gray-500 text-sm mt-2">Admin is streaming live!</p>
+                                                    <div className="space-y-3">
+                                                        <div className="flex items-center justify-center gap-3">
+                                                            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                                                            <p className="text-red-400 text-4xl font-bold tracking-wider">LIVE NOW</p>
+                                                            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                                                        </div>
+                                                        <p className="text-white text-xl font-semibold">Broadcasting in Progress</p>
+                                                        <p className="text-gray-300 text-lg">Stream is currently active</p>
+                                                        <div className="mt-4 inline-flex items-center gap-2 bg-green-500/20 px-6 py-3 rounded-full border border-green-500/50">
+                                                            <Eye className="w-5 h-5 text-green-400" />
+                                                            <span className="text-green-400 font-semibold">{viewers} watching</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         ) : (
@@ -514,25 +638,21 @@
                                                 </div>
                                             </div>
                                         )}
-                                        {broadcastState.isLive && (
-                                            <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-500 px-3 py-1 rounded-full shadow-lg">
-                                                <Radio className="w-4 h-4 text-white animate-pulse" />
-                                                <span className="text-white font-semibold text-sm">LIVE</span>
+                                        {isStreaming && (
+                                            <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-500 px-4 py-2 rounded-full shadow-lg animate-pulse">
+                                                <div className="w-3 h-3 bg-white rounded-full animate-ping"></div>
+                                                <span className="text-white font-bold text-sm">LIVE</span>
                                             </div>
                                         )}
                                     </div>
                                     
                                     <div className="p-6 space-y-4">
                                         <div>
-                                            <h2 className="text-white text-2xl font-bold mb-2">
-                                                {broadcastState.streamData?.title || streamTitle}
-                                            </h2>
-                                            <p className="text-gray-300">
-                                                {broadcastState.streamData?.description || streamDescription}
-                                            </p>
+                                            <h2 className="text-white text-2xl font-bold mb-2">{streamTitle}</h2>
+                                            <p className="text-gray-300">{streamDescription}</p>
                                         </div>
                                         
-                                        <div className="flex items-center gap-4">
+                                        <div className="flex items-center gap-4 flex-wrap">
                                             <button
                                                 onClick={handleLike}
                                                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full hover:from-red-600 hover:to-pink-600 transition-all transform hover:scale-105"
